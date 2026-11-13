@@ -3,404 +3,516 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>넙죽이 시범 화면</title>
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="apple-touch-icon" href="icon.png">
 <link rel="icon" href="icon.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#4f46e5">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
-<style>
-:root{
-  --accent:#4f46e5; --accent-soft:#eeeefc; --accent-ink:#3f3a9e;
-  --text:#111113; --muted:#62626e; --line:#e6e6ee; --soft:#f4f4fb;
-  --ok:#15803d; --ok-soft:#e7f6ec; --warn:#b45309; --warn-soft:#fff3e0; --no:#8b8b96; --no-soft:#f0f0f4;
-  --blob:#3b6cf6;
-}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;background:linear-gradient(160deg,#f1f1ff,#f8f7fc) fixed;color:var(--text);font-family:Pretendard,-apple-system,"Apple SD Gothic Neo",sans-serif}
-.app{max-width:440px;margin:0 auto;min-height:100vh;padding:18px 16px 90px}
-.top{display:flex;align-items:center;gap:9px;margin-bottom:20px}
-.logo{width:34px;height:34px;border-radius:10px;background:#fff;display:grid;place-items:center;box-shadow:0 1px 0 var(--line),0 2px 8px rgba(79,70,229,.12);border:1px solid var(--line);flex:none}
-.logo i{display:block;width:22px;height:13px;border-radius:50%;background:var(--blob)}
-.top b{font-size:17px;letter-spacing:-.2px}
-.pill{margin-left:auto;font-size:11px;color:var(--muted);background:#fff;border:1px solid var(--line);padding:4px 10px;border-radius:999px}
-h1{font-size:23px;margin:2px 0 6px;letter-spacing:-.4px}
-.lead{color:var(--muted);font-size:14px;margin:0 0 6px;line-height:1.55}
-.panel{background:#fff;border:1px solid var(--line);border-radius:24px;padding:18px 16px;margin-top:14px}
-label.f{display:block;font-size:13px;font-weight:700;margin:14px 0 8px}
-label.f:first-child{margin-top:0}
-label.f span{font-weight:400;color:var(--muted)}
-input::placeholder{color:#b9b9c6}
-select,input{width:100%;padding:13px 12px;border:1.5px solid var(--line);border-radius:14px;font-size:15px;background:#fff;font-family:inherit;color:var(--text);outline:none}
-select:focus,input:focus{border-color:var(--accent)}
-select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,#999 50%),linear-gradient(135deg,#999 50%,transparent 50%);background-position:calc(100% - 18px) 50%,calc(100% - 13px) 50%;background-size:5px 5px;background-repeat:no-repeat}
-.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
-.grid3 small{display:block;font-size:11px;color:var(--muted);margin-bottom:5px}
-.chips{display:flex;flex-wrap:wrap;gap:8px}
-.chip{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:9px 16px;font-size:14px;cursor:pointer;font-family:inherit;color:var(--text)}
-.chip.on{background:var(--accent-soft);border-color:var(--accent);color:var(--accent-ink);font-weight:700}
-.chip.add{border-style:dashed;color:var(--accent);font-weight:700;padding:9px 14px}
-.addrow{display:none;gap:8px;margin-top:8px}.addrow.on{display:flex}
-.addrow input{padding:10px 12px;font-size:14px}.addrow .chip{flex:none}
-.lock{display:flex;gap:8px;align-items:flex-start;background:var(--soft);border-radius:14px;padding:11px 12px;font-size:12.5px;color:var(--muted);line-height:1.5;margin-top:14px}
-.btn{display:block;width:100%;border:0;border-radius:999px;padding:15px;font-size:16px;font-weight:700;font-family:inherit;cursor:pointer;margin-top:12px}
-.btn.primary{background:var(--accent);color:#fff}
-.btn.primary:disabled{background:#c9c8ea;cursor:not-allowed}
-.btn.ghost{background:#fff;color:var(--text);border:1.5px solid var(--line)}
-.btn.link{background:none;color:var(--muted);font-size:13px;font-weight:500;padding:8px;margin-top:4px}
-.hint{font-size:12px;color:var(--muted);text-align:center;margin-top:8px}
-.screen{display:none}.screen.on{display:block;animation:fade .25s ease}
-@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-.wait{text-align:center;padding:70px 10px;color:var(--muted);line-height:1.6}
-.wait .logo{width:64px;height:64px;border-radius:18px;margin:0 auto 18px}
-.wait .logo i{width:40px;height:23px;animation:bob 1.4s ease-in-out infinite}
-@keyframes bob{50%{transform:translateY(-3px) scaleX(1.05)}}
-.banner{position:fixed;left:50%;top:-150px;transform:translateX(-50%);width:min(420px,calc(100% - 20px));background:rgba(255,255,255,.97);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-radius:20px;box-shadow:0 12px 32px rgba(30,27,75,.18);padding:12px 14px;display:flex;gap:11px;align-items:center;cursor:pointer;transition:top .45s cubic-bezier(.2,.9,.3,1.2);z-index:20;border:1px solid var(--line)}
-.banner.show{top:12px}
-.banner small{display:block;color:var(--muted);font-size:12px;margin-bottom:2px}
-.banner strong{font-size:14px;display:block}
-.banner em{font-style:normal;font-size:12.5px;color:var(--accent-ink)}
-.summary{background:#fff;border:1px solid var(--line);border-radius:16px;padding:11px 14px;font-size:13px;color:var(--muted);margin:10px 0 4px;line-height:1.5}
-.summary b{color:var(--text)}
-.card{background:#fff;border:1.5px solid var(--line);border-radius:20px;padding:14px;margin:10px 0;cursor:pointer;transition:transform .1s}
-.card:active{transform:scale(.985)}
-.card.no{opacity:.62;cursor:default}
-.row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
-.badge{font-size:12px;font-weight:800;padding:4px 10px;border-radius:999px}
-.badge.ok{background:var(--ok-soft);color:var(--ok)}
-.badge.warn{background:var(--warn-soft);color:var(--warn)}
-.badge.no{background:var(--no-soft);color:var(--no)}
-.dday{font-size:12px;font-weight:700;color:var(--muted)}
-.kind{margin-left:auto;font-size:11px;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:2px 8px}
-.card h3{font-size:15px;margin:2px 0 4px;line-height:1.4}
-.org{font-size:12px;color:var(--muted)}
-.checks{margin-top:9px;padding-top:9px;border-top:1px dashed var(--line);font-size:12.5px;display:flex;flex-direction:column;gap:3px}
-.checks .ok{color:var(--ok)}.checks .warn{color:var(--warn)}.checks .no{color:var(--no)}
-.sec{font-size:13px;font-weight:700;color:var(--muted);margin:22px 0 4px}
-.back{background:none;border:0;color:var(--muted);font-size:14px;padding:0;margin-bottom:12px;cursor:pointer;font-family:inherit}
-.facts{font-size:13px;color:var(--muted);margin-top:10px;display:grid;grid-template-columns:64px 1fr;gap:5px 8px}
-.facts b{color:var(--text);font-weight:600}
-.chat{display:flex;flex-direction:column;gap:10px;margin:16px 0}
-.me,.ai{max-width:88%;padding:11px 13px;border-radius:18px;font-size:14px;line-height:1.6}
-.me{align-self:flex-end;background:var(--accent);color:#fff;border-bottom-right-radius:5px}
-.ai{align-self:flex-start;background:#fff;border:1px solid var(--line);border-bottom-left-radius:5px}
-.ai .klms{display:block;margin-top:9px;padding-top:9px;border-top:1px dashed var(--line);font-size:13px;color:var(--muted)}
-.typing{padding:14px 16px}.dots{display:inline-flex;gap:4px}.dots i{width:7px;height:7px;border-radius:50%;background:#c4c3d6;animation:dot 1s infinite}.dots i:nth-child(2){animation-delay:.15s}.dots i:nth-child(3){animation-delay:.3s}@keyframes dot{0%,80%,100%{opacity:.35;transform:none}40%{opacity:1;transform:translateY(-3px)}}
-.pill{text-decoration:none}
-a.btn{text-align:center;text-decoration:none;box-sizing:border-box}
-.dday.soon{color:#dc2626}
-.go{margin-left:6px;color:#b9b9c6;font-size:18px;line-height:1}
-.empty{background:#fff;border:1px dashed var(--line);border-radius:20px;padding:22px;text-align:center;color:var(--muted);font-size:14px;line-height:1.6}
-.foot{position:fixed;left:0;right:0;bottom:0;text-align:center;font-size:11px;color:var(--muted);background:linear-gradient(transparent,#f6f5fc 45%);padding:24px 12px calc(10px + env(safe-area-inset-bottom))}
-.modal{position:fixed;inset:0;background:rgba(17,17,40,.45);display:none;align-items:center;justify-content:center;z-index:30;padding:20px}
-.modal.on{display:flex}
-.modal .box{background:#fff;border-radius:24px;padding:24px;max-width:340px;text-align:center}
-.modal h4{margin:0 0 8px;font-size:17px}
-.modal p{margin:0 0 6px;color:var(--muted);font-size:14px;line-height:1.55}
-.toast{position:fixed;left:50%;bottom:64px;transform:translateX(-50%);background:var(--text);color:#fff;font-size:13px;padding:10px 14px;border-radius:999px;opacity:0;transition:opacity .2s;z-index:40;white-space:nowrap}
-.toast.on{opacity:1}
-</style>
+<title>넙죽이</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap">
+<style>body{background:#fff}
+.nz{--text:#111113;--muted:#62626e;--line:#e6e6ee;--soft:#f4f4fb;--accent:#4f46e5;background:#fff;color:var(--text);font-family:'Noto Sans KR',Pretendard,-apple-system,'Apple SD Gothic Neo',sans-serif;line-height:1.55;word-break:keep-all;overflow-wrap:anywhere;-webkit-font-smoothing:antialiased}
+.nz *{box-sizing:border-box;min-width:0}
+.nz :where(h1,h2,h3,p){margin:0}
+.nz-wrap{max-width:1280px;width:100%;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+.nz-bg{background:radial-gradient(900px 520px at 8% -10%,#dfe2ff 0%,transparent 62%),radial-gradient(820px 560px at 96% 8%,#ffe0ee 0%,transparent 62%),#fbfbff;position:sticky;top:0;z-index:1;min-height:100svh;display:flex;align-items:center;padding-top:72px;padding-bottom:40px}
+.nz-topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;height:72px;margin-bottom:-72px;pointer-events:none;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+.nz-top{display:flex;justify-content:space-between;align-items:center;gap:8px;max-width:calc(1240px - 760px*var(--s,0));margin:0 auto;padding:calc(18px - 10px*var(--s,0)) calc(10px*var(--s,0)) calc(18px - 10px*var(--s,0)) calc(14px*var(--s,0));border:1px solid rgba(230,230,238,var(--s,0));border-radius:999px;background:rgba(255,255,255,calc(.94*var(--s,0)));box-shadow:0 10px 30px rgba(40,40,90,calc(.14*var(--s,0)));backdrop-filter:blur(calc(14px*var(--s,0)));-webkit-backdrop-filter:blur(calc(14px*var(--s,0)));transform:translateY(calc(10px*var(--s,0)))}
+.nz-sheet{position:relative;z-index:2;background:#fff;border-radius:32px 32px 0 0;box-shadow:0 -24px 70px rgba(40,40,90,.14)}
+.nz-logo{display:flex;align-items:center;gap:9px}
+.nz-logo small{font-size:13px;font-weight:600;color:var(--muted);white-space:nowrap}
+.nz-mark{display:block;flex:none;width:34px;height:34px;border-radius:10px;box-shadow:0 2px 8px rgba(79,70,229,.12)}
+.nz-name{font-size:18px;font-weight:800;letter-spacing:-.3px;color:#111113}
+.nz-demo{text-align:center;margin:22px auto 6px}.nz-demo a{color:#4f46e5;font-weight:700;font-size:16px;text-decoration:none;border-bottom:2px solid #c7c4f5;padding-bottom:2px}.nz-demo p{font-size:13px;color:#62626e;margin-top:8px}
+.nz-wm{display:block;flex:none;width:104px;height:18px}
+.nz-wm .lw{fill:var(--text);fill-rule:evenodd}
+.lm{fill:#4f46e5}.ln{fill:#fff}.lp{fill:#ff8ab5}.lh{stroke:#fff;stroke-width:5}
+.nz-status{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--muted);background:#fff;border:1px solid var(--line);border-radius:999px;padding:6px 12px;white-space:nowrap}
+.nz-status i{width:7px;height:7px;border-radius:50%;background:var(--accent)}
+.nz-hero{display:grid;grid-template-columns:1.08fr .92fr;gap:clamp(40px,5vw,80px);align-items:center}
+.nz-hero h1{font-size:clamp(38px,min(5.5vw,9vh),88px);line-height:1.13;letter-spacing:-.045em;font-weight:800}
+.nz-hero h1 em{font-style:normal;color:var(--accent)}
+.nz-lead{margin:24px 0 32px;max-width:32em;font-size:clamp(16px,min(1.7vw,2.6vh),22px);color:var(--muted)}
+.nz-btn{display:inline-flex;align-items:center;gap:8px;background:var(--text);color:#fff;font-weight:700;font-size:16px;padding:15px 26px;border-radius:999px;text-decoration:none;transition:transform .18s ease,background .18s ease}
+.nz-btn:hover{transform:translateY(-2px);background:var(--accent)}
+.nz-btn:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.nz-demo{background:#fff;border:1px solid #ecECF6;border-radius:28px;padding:20px;box-shadow:0 26px 60px rgba(40,40,90,.16)}
+.nz-tag{display:inline-block;font-size:12px;font-weight:600;color:var(--muted);background:var(--soft);border-radius:999px;padding:3px 10px}
+.nz-demo-h{display:flex;align-items:center;gap:10px;margin:2px 0 10px;font-size:18px;font-weight:700;letter-spacing:-.02em}
+.nz-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.nz-chips span{font-size:12.5px;font-weight:600;color:#3f3a9e;background:#eeeefc;border-radius:999px;padding:3px 10px}
+.nz-rows{display:grid;gap:8px}
+.nz-row{display:grid;grid-template-columns:40px 1fr auto;gap:12px;align-items:center;background:var(--soft);border-radius:14px;padding:10px 12px}
+.nz-kind{width:40px;height:40px;border-radius:12px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.nz-row b{display:block;font-size:15px;font-weight:700;letter-spacing:-.01em}
+.nz-row small{display:block;font-size:12.5px;color:var(--muted)}
+.nz-dday{font-size:13px;font-weight:800;color:var(--accent)}
+.nz-chat{display:flex;flex-direction:column;gap:8px;margin-top:14px}
+.nz-me,.nz-ai{padding:10px 14px;border-radius:16px;font-size:14px;max-width:92%}
+.nz-me{align-self:flex-end;background:var(--text);color:#fff}
+.nz-ai{align-self:flex-start;background:var(--soft)}
+.nz-emo{display:block;width:48px;height:48px;flex:none;overflow:visible}
+.nz .nz-sm{width:28px;height:28px}
+.nz-emo .ia{fill:#4f46e5}.nz-emo .ib{fill:#c9cbff}.nz-emo .ic{fill:#111113}.nz-emo .ip{fill:#ff8ab5}.nz-emo .iw{fill:#fff}
+.nz-emo .io{stroke:#fff;stroke-width:3}
+.nz-emo .is{fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.nz-emo .s-ink{stroke:#111113}.nz-emo .s-w{stroke:#fff}.nz-emo .s-b{stroke:#c9cbff}.nz-emo .s-p{stroke:#ff8ab5}.nz-emo .s-a{stroke:#4f46e5}
+.nz-emo .idash{stroke-dasharray:4 5}
+.nz-sec{padding:60px 0 0}
+.nz-head2{display:flex;justify-content:space-between;align-items:flex-end;gap:32px;margin-bottom:26px}
+.nz-sec h2,.nz-final h2{font-size:clamp(28px,4vw,44px);line-height:1.2;letter-spacing:-.035em;font-weight:800}
+.nz-side{max-width:22em;font-size:16px;color:var(--muted);text-align:right}
+.nz-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.nz-card{background:linear-gradient(160deg,#f1f1ff,#f8f7fc);border-radius:24px;padding:24px;display:flex;flex-direction:column;gap:16px}
+.nz-tile{width:72px;height:72px;border-radius:20px;background:#fff;display:grid;place-items:center;box-shadow:0 8px 20px rgba(40,40,90,.08)}
+.nz-card p.nz-q{font-size:19px;font-weight:650;letter-spacing:-.02em;line-height:1.45}
+.nz-card small{margin-top:auto;font-size:13px;color:var(--muted)}
+.nz-badge{font-size:12px;font-weight:600;color:var(--muted);background:#fff;border-radius:999px;padding:4px 10px;white-space:nowrap}
+.nz-num{display:block;font-size:14px;font-weight:700;color:var(--accent)}
+.nz-scene{margin-top:60px}
+.nz-stage{max-width:1280px;margin:0 auto;padding:0 20px;display:flex;flex-direction:column;gap:14px;--l:1}
+.nz-light,.nz-wall,.nz-scrim-c,.nz-scrim-s,.nz-slot,.nz-ghost,.nz-cc,.nz-meta{display:none}
+.nz-sh{font-size:clamp(28px,4vw,44px);line-height:1.2;letter-spacing:-.035em;font-weight:800}
+.nz-caps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;--l:1}
+.nz-cap{background:linear-gradient(160deg,#f1f1ff,#f8f7fc);border-radius:24px;padding:24px}
+.nz-capt{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.nz-cap .nz-num{color:rgb(calc(170 - 91*var(--l)),calc(164 - 94*var(--l)),calc(255 - 26*var(--l)))}
+.nz-cap h3{font-size:22px;font-weight:700;letter-spacing:-.03em;line-height:1.2;color:rgb(calc(250 - 233*var(--l)),calc(250 - 233*var(--l)),calc(252 - 233*var(--l)))}
+.nz-cap p{margin-top:10px;font-size:15px;color:rgb(calc(188 - 90*var(--l)),calc(188 - 90*var(--l)),calc(196 - 86*var(--l)))}
+.nz-cc{flex-wrap:wrap;gap:8px;margin-top:20px}
+.nz-cc span{font-size:14px;font-weight:600;color:#fff;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:6px 14px;opacity:0;will-change:transform,opacity}
+.nz-panel{display:contents}
+.nz-ph{order:3;display:flex;align-items:center;gap:10px;font-size:18px;font-weight:700;letter-spacing:-.02em}
+.nz-ph svg{transform-origin:50% 14%}
+.nz-sc{order:4;display:flex;flex-wrap:wrap;gap:6px}
+.nz-sc span{font-size:12.5px;font-weight:600;color:#3f3a9e;background:#eeeefc;border-radius:999px;padding:3px 10px}
+.nz-m{order:5;--m:1;--x:1;--w:1;--t:40px;--fs:15px;position:relative;height:68px;border:1px solid transparent;border-radius:14px;overflow:hidden;background:var(--soft)}
+.nz-m .nz-kind{position:absolute;left:12px;top:50%;width:var(--t);height:var(--t);margin-top:calc(var(--t)/-2);opacity:var(--m);transform:scale(calc(.7 + .3*var(--m)))}
+.nz-mt{position:absolute;left:14px;right:calc(14px + var(--x)*(var(--t) + 46px));top:50%;transform:translate(calc(var(--x)*(var(--t) + 10px)),-50%)}
+.nz-mt b{display:block;font-size:var(--fs);font-weight:700;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nz-why{display:block;font-size:12.5px;color:var(--muted);opacity:var(--m);white-space:nowrap}
+.nz-meta{position:absolute;left:0;bottom:0;font-size:12px;color:rgba(255,255,255,.42);opacity:calc(1 - var(--w)*2)}
+.nz-m .nz-dday{position:absolute;right:12px;top:50%;transform:translateY(-50%);opacity:var(--m)}
+.nz-stage .nz-chat{order:6}
+.nz-live.nz-scene{height:420vh}
+.nz-live .nz-stage{display:block;position:sticky;top:0;height:100vh;height:100lvh;max-width:none;margin:0;padding:0;overflow:hidden;background:#111113}
+.nz-live .nz-light{display:block;position:absolute;inset:0;opacity:0;background:linear-gradient(to bottom,transparent 76%,#fff),radial-gradient(900px 520px at 8% 0%,#dfe2ff 0%,transparent 62%),radial-gradient(820px 560px at 96% 12%,#ffe0ee 0%,transparent 62%),#fbfbff}
+.nz-live .nz-wall{display:block;position:absolute;inset:0;z-index:1}
+.nz-wall::after{content:"";position:absolute;inset:0;background:linear-gradient(#111113,transparent 16%,transparent 84%,#111113)}
+.nz-col{position:absolute;left:0;top:0;display:flex;flex-direction:column;gap:var(--gap);will-change:transform}
+.nz-n{flex:none;width:var(--cw);height:var(--ch);padding:0 14px;display:flex;flex-direction:column;justify-content:center;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:16px}
+.nz-n b{font-size:15px;font-weight:600;letter-spacing:-.01em;color:rgb(190,190,190);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nz-n small{font-size:12px;color:rgba(255,255,255,.42)}
+.nz-live .nz-scrim-c{display:block;position:absolute;inset:0;z-index:2;background:radial-gradient(62% 46% at 50% 50%,rgba(17,17,19,.94) 25%,rgba(17,17,19,0) 100%)}
+.nz-live .nz-scrim-s{display:block;position:absolute;inset:0;z-index:2;opacity:0;background:linear-gradient(90deg,rgba(17,17,19,.96) 0%,rgba(17,17,19,.86) 38%,rgba(17,17,19,0) 62%)}
+.nz-live .nz-sh{position:absolute;left:0;right:0;z-index:5;margin:0;padding:0 16px;text-align:center;color:#fff;white-space:nowrap;font-size:clamp(34px,min(10vw,13vh),104px);line-height:1.1;letter-spacing:-.045em}
+.nz-live .nz-caps{display:block;position:absolute;top:0;z-index:5;--l:0}
+.nz-live .nz-cap{position:absolute;left:0;width:100%;padding:0;background:none;border-radius:0;opacity:0;will-change:transform,opacity}
+.nz-live .nz-capt{margin-bottom:18px}
+.nz-live .nz-cap h3{font-size:clamp(36px,4.4vw,84px);line-height:1.12;letter-spacing:-.04em;font-weight:800}
+.nz-live .nz-cap p{margin-top:16px;font-size:clamp(16px,1.5vw,24px);max-width:26em}
+.nz-live .nz-cc{display:flex}
+.nz-live .nz-panel{display:block;position:absolute;z-index:3;background:#fff;border:1px solid #ecECF6;border-radius:28px;padding:clamp(20px,2.6vh,30px);box-shadow:0 30px 70px rgba(30,30,70,.22);opacity:0;will-change:transform,opacity}
+.nz-live .nz-sc{margin-top:10px}
+.nz-live .nz-slot{display:block;margin-top:12px}
+.nz-live .nz-m{position:absolute;left:0;top:0;z-index:4;height:auto;will-change:transform}
+.nz-live .nz-meta{display:block}
+.nz-live .nz-ph{font-size:clamp(18px,2.25vh,25px)}
+.nz-live .nz-ph svg{width:clamp(28px,3.3vh,38px);height:clamp(28px,3.3vh,38px)}
+.nz-live .nz-sc span{font-size:clamp(12.5px,1.55vh,16px);padding:3px 11px}
+.nz-live .nz-why{font-size:clamp(12.5px,1.55vh,16px)}
+.nz-live .nz-m .nz-dday{font-size:clamp(13px,1.6vh,17px)}
+.nz-live .nz-m .nz-kind{font-size:clamp(12.5px,1.55vh,16px)}
+.nz-live .nz-me,.nz-live .nz-ai{font-size:clamp(14px,1.75vh,19px)}
+.nz-live .nz-me,.nz-live .nz-ai{opacity:0;will-change:transform,opacity}
+.nz-live .nz-ai{position:relative}
+.nz-live .nz-ghost{display:inline;visibility:hidden}
+.nz-live .nz-type{position:absolute;inset:0;padding:inherit}
+@media (max-width:860px){.nz-caps{grid-template-columns:1fr}.nz-scene{margin-top:48px}.nz-live .nz-scrim-s{background:linear-gradient(180deg,rgba(17,17,19,.99) 0%,rgba(17,17,19,.96) 38%,rgba(17,17,19,0) 58%)}.nz-live .nz-scrim-c{background:radial-gradient(95% 26% at 50% 50%,rgba(17,17,19,.97) 35%,rgba(17,17,19,0) 100%)}.nz-live .nz-capt{margin-bottom:6px}.nz-live .nz-cap h3{font-size:clamp(25px,3.7svh,34px)}.nz-live .nz-cap p{margin-top:5px;font-size:clamp(13.5px,1.8svh,15.5px);max-width:none}.nz-live .nz-cc{margin-top:12px}.nz-cc span{font-size:13px;padding:5px 11px}.nz-cap .nz-tile{width:48px;height:48px;border-radius:14px}.nz-cap .nz-tile svg{width:32px;height:32px}.nz-live .nz-panel{padding:14px;border-radius:22px}.nz-live .nz-ph{font-size:clamp(15px,2.05svh,18px)}.nz-live .nz-ph svg{width:26px;height:26px}.nz-live .nz-sc span{font-size:12px}.nz-live .nz-why{font-size:clamp(11.5px,1.5svh,13px)}.nz-live .nz-m .nz-dday{font-size:13px}.nz-live .nz-m .nz-kind{font-size:12px}.nz-live .nz-me,.nz-live .nz-ai{font-size:clamp(12.5px,1.65svh,14px)}.nz-live .nz-sc{margin-top:7px}.nz-live .nz-slot{margin-top:8px}.nz-n{padding:0 12px;border-radius:13px}.nz-n b{font-size:14px}.nz-why{font-size:11.5px}.nz-meta{font-size:11.5px}}
+@media (max-width:860px) and (max-height:760px){.nz-cap .nz-tile{display:none}}
+.nz-compare{margin-top:14px;border:1px solid var(--line);border-radius:24px;overflow:hidden;display:grid;grid-template-columns:150px 1fr 1fr}
+.nz-compare>div{padding:15px 20px;border-top:1px solid var(--line);font-size:15px}
+.nz-compare>.nz-ch{border-top:0;font-size:13px;font-weight:700;color:var(--muted)}
+.nz-compare>.nz-cl{font-weight:700}
+.nz-compare>.nz-cn{color:var(--muted)}
+.nz-compare>.nz-cy{background:#f3f3ff;font-weight:600}
+.nz-compare>.nz-chy{background:#f3f3ff;color:var(--accent)}
+.nz-proof{background:var(--text);color:#fff;border-radius:28px;padding:40px}
+.nz-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.nz-stats b{display:block;font-size:clamp(44px,5.6vw,68px);line-height:1;font-weight:800;letter-spacing:-.04em}
+.nz-stats span{display:block;margin-top:12px;font-size:15px;color:#b4b4bd}
+.nz-notes{display:grid;gap:8px;margin-top:32px;padding-top:24px;border-top:1px solid #33333a;font-size:15px;color:#d8d8de}
+.nz-final{margin:60px 0;border-radius:32px;padding:56px 24px;text-align:center;background:linear-gradient(120deg,#dfe2ff,#f3eeff 50%,#ffe0ee)}
+.nz-final-ic{display:flex;justify-content:center;gap:12px;margin-bottom:20px}
+.nz-final p{margin:12px auto 26px;max-width:30em;color:var(--muted)}
+.nz-foot{border-top:1px solid var(--line);padding:24px 0 40px;font-size:13px;color:var(--muted)}
+.nz-foot .nz-logo{margin-bottom:12px}
+@media (max-width:860px){.nz-hero,.nz-grid,.nz-stats{grid-template-columns:1fr}.nz-head2{display:block}.nz-side{text-align:left;margin-top:10px}.nz-proof{padding:28px 22px}.nz-sec{padding-top:48px}.nz-final{margin:48px 0;padding:44px 20px}.nz-hero .nz-btn,.nz-final .nz-btn{width:100%;justify-content:center}.nz-compare{grid-template-columns:1fr}.nz-compare>.nz-ch{display:none}.nz-compare>div{border-top:0;padding:4px 18px}.nz-compare>.nz-cl{padding-top:16px;border-top:1px solid var(--line)}.nz-compare>.nz-cl:nth-child(4){border-top:0}.nz-compare>.nz-cy{background:none;padding-bottom:16px}.nz-compare>.nz-cn::before{content:'지금: '}.nz-compare>.nz-cy::before{content:'넙죽이: ';color:var(--accent)}}
+@media (max-width:860px){.nz-bg{padding-top:66px;padding-bottom:14px;align-items:stretch}.nz-hero{min-height:calc(100vh - 80px);min-height:calc(100svh - 80px);display:flex;flex-direction:column;justify-content:space-between;gap:clamp(10px,1.8svh,18px)}.nz-hero h1{font-size:clamp(27px,4.7svh,40px)}.nz-lead{margin:clamp(8px,1.4svh,16px) 0 clamp(10px,1.8svh,20px);font-size:clamp(13px,1.85svh,16px)}.nz-hero .nz-btn{padding-top:clamp(10px,1.6svh,15px);padding-bottom:clamp(10px,1.6svh,15px)}.nz-demo{padding:clamp(11px,1.8svh,18px);border-radius:22px}.nz-demo-h{margin:0 0 clamp(5px,1svh,10px);font-size:clamp(14px,1.95svh,17px)}.nz-chips{margin-bottom:clamp(6px,1.2svh,12px)}.nz-rows{gap:clamp(4px,.8svh,8px)}.nz-row{grid-template-columns:clamp(30px,4.4svh,38px) 1fr auto;gap:10px;padding:clamp(5px,1svh,10px) 10px;border-radius:12px}.nz-kind{width:clamp(30px,4.4svh,38px);height:clamp(30px,4.4svh,38px);border-radius:10px;font-size:11.5px}.nz-row b{font-size:clamp(13px,1.75svh,15px);line-height:1.3}.nz-row small{font-size:clamp(11px,1.45svh,12.5px);line-height:1.3}.nz-chat{gap:clamp(4px,.8svh,8px);margin-top:clamp(6px,1.2svh,12px)}.nz-me,.nz-ai{padding:clamp(5px,.9svh,10px) 12px;font-size:clamp(12.5px,1.65svh,14px);line-height:1.4;border-radius:13px}}
+@media (max-width:860px) and (max-height:720px){.nz-chips{display:none}}
+@media (max-width:384px){.nz-logo small{display:none}}
+@media (prefers-reduced-motion:reduce){.nz-btn{transition:none}}</style>
 </head>
-<body>
-<div class="app">
-  <div class="top"><div class="logo"><i></i></div><b>넙죽이</b><a class="pill" href="landing/" target="_blank" rel="noopener">시범 화면 · 소개 ↗</a></div>
-
-  <!-- 화면 1: 조건 입력 -->
-  <section class="screen on" id="s1">
-    <h1>조건을 알려 주세요</h1>
-    <p class="lead">한 번만 입력하면, 조건에 맞는 장학·연구·근로 공지가 올라올 때 먼저 알려 드려요.</p>
-    <div class="panel">
-      <label class="f" for="grade">학년</label>
-      <select id="grade">
-        <option value="">선택</option>
-        <option value="1">1학년</option><option value="2">2학년</option>
-        <option value="3">3학년</option><option value="4">4학년</option>
-      </select>
-      <label class="f" for="dept">학과</label>
-      <select id="dept">
-        <option value="">선택</option>
-        <option>새내기과정학부</option><option>전산학부</option><option>전기및전자공학부</option>
-        <option>기계공학과</option><option>화학과</option><option>생명과학과</option>
-        <option>산업디자인학과</option><option>경영공학부</option>
-      </select>
-      <label class="f">성적·이수학점</label>
-      <div class="grid3">
-        <div><small>직전 학기 평점</small><input id="gpa" type="number" inputmode="decimal" step="0.01" min="0" max="4.3" placeholder="예) 3.50"></div>
-        <div><small>직전 학기 학점</small><input id="last" type="number" inputmode="numeric" min="0" max="30" placeholder="예) 18"></div>
-        <div><small>누적 이수학점</small><input id="cum" type="number" inputmode="numeric" min="0" max="200" placeholder="예) 40"></div>
-      </div>
-      <label class="f">관심 분야 <span>(여러 개 선택)</span></label>
-      <div class="chips" id="interest">
-        <button class="chip" data-v="장학">장학</button>
-        <button class="chip" data-v="연구">연구</button>
-        <button class="chip" data-v="근로">근로</button>
-        <button class="chip add" id="addInterest" aria-label="관심 분야 추가">＋</button>
-      </div>
-      <div class="addrow" id="addRow">
-        <input id="addInput" type="text" maxlength="12" placeholder="예) 공모전, 교환학생, 인턴">
-        <button class="chip on" id="addOk">추가</button>
-      </div>
-      <label class="f">알림 받을 곳</label>
-      <div class="chips" id="channel">
-        <button class="chip on" data-v="푸시">푸시 알림</button>
-        <button class="chip" data-v="카카오톡">카카오톡</button>
-        <button class="chip" data-v="메일">메일</button>
-      </div>
-      <div class="lock">🔒<span>입력하신 정보는 휴대폰 내부에서만 처리되고 외부로 전송되지 않습니다.</span></div>
-    </div>
-    <button class="btn primary" id="start" disabled>시작하기</button>
-    <div class="hint" id="startHint"></div>
-    <button class="btn link" id="wipe">이 휴대폰에서 내 정보 지우기</button>
-  </section>
-
-  <!-- 대기 -->
-  <section class="screen" id="sWait">
-    <div class="wait"><div class="logo"><i></i></div>
-      <b style="color:var(--text);font-size:17px">설정 완료!</b><br>
-      조건에 맞는 공지가 올라오면<br><span id="chName">카카오톡</span>으로 먼저 알려 드릴게요.
-    </div>
-  </section>
-
-  <!-- 화면 2: 판정 결과 -->
-  <section class="screen" id="s2">
-    <h1 id="matchTitle">N건이 조건과 맞아요</h1>
-    <div class="summary" id="profileLine"></div>
-    <div id="list"></div>
-    <button class="btn ghost" id="edit">조건 바꾸기</button>
-  </section>
-
-  <!-- 화면 3: AI 확인 → 신청 -->
-  <section class="screen" id="s3">
-    <button class="back" id="back">← 목록으로</button>
-    <div class="card" style="cursor:default" id="detail"></div>
-    <div class="chat" id="chat"></div>
-    <div id="actions" style="display:none">
-      <button class="btn primary" id="apply">신청하러 가기</button>
-      <button class="btn ghost" id="share">친구에게 공유</button>
-    </div>
-  </section>
+<body style="margin:0">
+<div class="nz"><div class="nz-topbar"><div class="nz-top"><span class="nz-logo"><svg class="nz-mark" viewBox="0 0 36 36" aria-hidden="true"><rect x="0.5" y="0.5" width="35" height="35" rx="10" fill="#ffffff" stroke="#e6e6ee"/><ellipse cx="18" cy="19" rx="11.5" ry="6.5" fill="#3b6cf6"/></svg><b class="nz-name">넙죽이</b></span><span class="nz-status"><i></i>시범 화면 공개</span></div></div><div class="nz-bg"><div class="nz-wrap">
+<section class="nz-hero">
+<div>
+<h1>포탈에 안 들어가도,<br/><em>내 공지</em>는 AI가<br/>먼저 알려 줍니다</h1>
+<p class="nz-lead">내 조건에 맞는 장학·연구·근로 공지가 뜨면 먼저 알려 드립니다. 자격과 마감은 쓰던 AI에게 물어보세요. 지금은 개발 중이라 사전 신청만 받습니다.</p>
+<a class="nz-btn" href="demo/">시범 화면 써 보기 <span aria-hidden="true">→</span></a>
 </div>
-
-<div class="banner" id="banner">
-  <div class="logo"><i></i></div>
-  <div><small>넙죽이 · 지금</small><strong id="bannerText">조건에 맞는 기회 발견!</strong><em>학년·학과·평점·이수학점까지 확인했어요</em></div>
+<div class="nz-chips"><span>3학년</span><span>전산학부</span><span>장학·연구·근로</span></div>
+<div class="nz-rows">
+<div class="nz-row"><span class="nz-kind">장학</span><div><b>외부 재단 장학금</b><small>학년·학과 조건 일치</small></div><span class="nz-dday">D-5</span></div>
+<div class="nz-row"><span class="nz-kind">연구</span><div><b>연구 참여 모집</b><small>관심 분야 일치</small></div><span class="nz-dday">D-12</span></div>
+<div class="nz-row"><span class="nz-kind">근로</span><div><b>교내 근로 모집</b><small>근무 시간 확인 필요</small></div><span class="nz-dday">D-3</span></div>
 </div>
-
-<div class="modal" id="modal"><div class="box">
-  <h4>시범 화면입니다</h4>
-  <p>실제 신청은 되지 않아요.<br>진짜 공지로 써 보고 싶다면 사전 신청을 남겨 주세요.</p>
-  <a class="btn primary" href="https://docs.google.com/forms/d/e/1FAIpQLSdwQCW6N9Bbo9OQxlOK03TP_RYF0qePZaE66SEuAYThNnsvbA/viewform" target="_blank" rel="noopener">먼저 써 보기 신청</a>
-  <a class="btn link" href="landing/" target="_blank" rel="noopener">넙죽이 소개 보기</a>
-  <button class="btn ghost" id="modalOk">닫기</button>
+<div class="nz-chat"><div class="nz-me">이 장학금 나도 지원돼?</div><div class="nz-ai">네, 학년·학과 조건이 맞아요. 마감은 5일 남았어요. KLMS 새 공지도 1건 있어요.</div></div>
+</div>
+</section>
 </div></div>
-<div class="toast" id="toast"></div>
+<div class="nz-sheet"><div class="nz-wrap">
+<section class="nz-sec">
+<div class="nz-head2"><h2>기회가 없는 게 아니라,<br/>있는 줄 모릅니다</h2></div>
+<div class="nz-grid">
+<div class="nz-card"><div class="nz-tile"><svg class="nz-emo" viewBox="0 0 48 48" aria-hidden="true"><rect class="ib" x="5" y="12" width="38" height="30" rx="8"/><path class="ia" d="M13 12h22a8 8 0 0 1 8 8v1H5v-1a8 8 0 0 1 8-8z"/><path class="is s-ink" d="M14 29q3.5 3.5 7 0"/><path class="is s-ink" d="M27 29q3.5 3.5 7 0"/><path class="is s-ink" d="M22 36h4"/><path class="is s-p" d="M36 2.5h7l-7 6.5h7"/></svg></div><p class="nz-q">“공지글이나 게시글 보러 들어가는 용도라 용건 없으면 잘 안 보게 된다.”</p><small>학생 인터뷰</small></div>
+<div class="nz-card"><div class="nz-tile"><svg class="nz-emo" viewBox="0 0 48 48" aria-hidden="true"><rect class="is s-a idash" x="8" y="6" width="26" height="36" rx="6"/><path class="is s-b" d="M15 16h12M15 23h12M15 30h6"/><circle class="ip io" cx="35" cy="33" r="9"/><path class="is s-w" d="M35 28.5v5"/><circle class="iw" cx="35" cy="37.8" r="1.6"/></svg></div><p class="nz-q">포탈에만 올라온 공지를 몰라서 놓칩니다.</p><small>논리적 글쓰기 시험 공지 사례</small></div>
+<div class="nz-card"><div class="nz-tile"><svg class="nz-emo" viewBox="0 0 48 48" aria-hidden="true"><path class="ib" d="M4 42c0-9 7-14 16-14s16 5 16 14z"/><circle class="ia" cx="20" cy="17" r="9"/><circle class="ip io" cx="37" cy="13" r="9"/><path class="is s-w" d="M33.7 10.6a3.4 3.4 0 1 1 5.2 2.9c-1.2.7-1.9 1.4-1.9 2.6"/><circle class="iw" cx="37" cy="19.4" r="1.4"/></svg></div><p class="nz-q">공지를 봐도 내가 신청 대상인지 파악하기 어렵습니다.</p><small>설문 4/10</small></div>
+</div>
+</section>
+</div>
+<section class="nz-scene"><div class="nz-stage">
+<div class="nz-light"></div>
+<div class="nz-wall" aria-hidden="true"></div>
+<div class="nz-scrim-c"></div>
+<div class="nz-scrim-s"></div>
+<h2 class="nz-sh">이렇게 달라집니다</h2>
+<div class="nz-caps">
+<div class="nz-cap"><div class="nz-capt"><div class="nz-tile"><svg class="nz-emo" viewBox="0 0 48 48" aria-hidden="true"><path class="ip" d="M27 3l1.4 3.6L32 8l-3.6 1.4L27 13l-1.4-3.6L22 8l3.6-1.4z"/><rect class="ia" x="4" y="15" width="18" height="20" rx="7"/><rect class="ic" x="21" y="19" width="8" height="4" rx="2"/><rect class="ic" x="21" y="27" width="8" height="4" rx="2"/><rect class="ib" x="31" y="12" width="13" height="26" rx="6.5"/><rect class="ia" x="31" y="19" width="5" height="4" rx="2"/><rect class="ia" x="31" y="27" width="5" height="4" rx="2"/></svg></div><span class="nz-num">01</span><span class="nz-badge">개발 중</span></div><h3>쓰던 AI에 연결</h3><p>평소 쓰는 AI에 넙죽이를 연결하고 학년·학과·관심 분야를 입력합니다.</p><div class="nz-cc" aria-hidden="true"><span>3학년</span><span>전산학부</span><span>장학·연구·근로</span></div></div>
+<div class="nz-cap"><div class="nz-capt"><div class="nz-tile"><svg class="nz-emo" viewBox="0 0 48 48" aria-hidden="true"><path class="ib" d="M18 38h12a6 6 0 0 1-12 0z"/><path class="ia" d="M24 6a13 13 0 0 0-13 13v6.6c0 1.3-.4 2.6-1.1 3.7l-2.2 3.4A2 2 0 0 0 9.4 36h29.2a2 2 0 0 0 1.7-3.3l-2.2-3.4a7 7 0 0 1-1.1-3.7V19A13 13 0 0 0 24 6z"/><path class="is s-w" d="M17 19a7 7 0 0 1 4.5-6.5"/><circle class="ip io" cx="36" cy="11" r="6"/></svg></div><span class="nz-num">02</span><span class="nz-badge">개발 중</span></div><h3>먼저 알림</h3><p>내 조건에 맞는 포탈 공지가 올라오면 알림이 먼저 옵니다.</p></div>
+<div class="nz-cap"><div class="nz-capt"><div class="nz-tile"><svg class="nz-emo" viewBox="0 0 48 48" aria-hidden="true"><path class="ia" d="M10 9h22a7 7 0 0 1 7 7v13a7 7 0 0 1-7 7H19l-8 7v-7h-1a7 7 0 0 1-7-7V16a7 7 0 0 1 7-7z"/><path class="is s-w" d="M12.5 22.5l6 6 11-12"/><path class="ip" d="M41 2l1.8 4.2L47 8l-4.2 1.8L41 14l-1.8-4.2L35 8l4.2-1.8z"/></svg></div><span class="nz-num">03</span><span class="nz-badge">개발 중</span></div><h3>AI에게 확인</h3><p>자격과 마감, KLMS 공지까지 물어본 뒤 포탈에서 신청합니다.</p></div>
+</div>
+<div class="nz-demo"><a href="demo/" target="_blank" rel="noopener">시범 화면 직접 눌러 보기 →</a><p>가상 공지로 만든 체험용 화면이에요. 입력한 정보는 휴대폰 안에서만 처리돼요.</p></div>
+<div class="nz-panel">
+<div class="nz-ph"><svg class="nz-emo nz-sm" viewBox="0 0 48 48" aria-hidden="true"><path class="ib" d="M18 38h12a6 6 0 0 1-12 0z"/><path class="ia" d="M24 6a13 13 0 0 0-13 13v6.6c0 1.3-.4 2.6-1.1 3.7l-2.2 3.4A2 2 0 0 0 9.4 36h29.2a2 2 0 0 0 1.7-3.3l-2.2-3.4a7 7 0 0 1-1.1-3.7V19A13 13 0 0 0 24 6z"/><path class="is s-w" d="M17 19a7 7 0 0 1 4.5-6.5"/><circle class="ip io" cx="36" cy="11" r="6"/></svg>내 조건에 맞는 새 공지 3건</div>
+<div class="nz-sc"><span>3학년</span><span>전산학부</span><span>장학·연구·근로</span></div>
+<div class="nz-slot"></div>
+<div class="nz-chat"><div class="nz-me">이 장학금 나도 지원돼?</div><div class="nz-ai"><span class="nz-ghost" aria-hidden="true">네, 학년·학과 조건이 맞아요. 마감은 5일 남았어요. KLMS 새 공지도 1건 있어요.</span><span class="nz-type">네, 학년·학과 조건이 맞아요. 마감은 5일 남았어요. KLMS 새 공지도 1건 있어요.</span></div></div>
+</div>
+<div class="nz-m"><span class="nz-kind">장학</span><div class="nz-mt"><b>외부 재단 장학금</b><small class="nz-why">학년·학과 조건 일치</small><small class="nz-meta">통합공지</small></div><span class="nz-dday">D-5</span></div>
+<div class="nz-m"><span class="nz-kind">연구</span><div class="nz-mt"><b>연구 참여 모집</b><small class="nz-why">관심 분야 일치</small><small class="nz-meta">세미나/행사</small></div><span class="nz-dday">D-12</span></div>
+<div class="nz-m"><span class="nz-kind">근로</span><div class="nz-mt"><b>교내 근로 모집</b><small class="nz-why">근무 시간 확인 필요</small><small class="nz-meta">통합공지</small></div><span class="nz-dday">D-3</span></div>
+</div></section>
+<div class="nz-wrap">
+<section class="nz-sec">
+<div class="nz-compare">
+<div class="nz-ch"></div><div class="nz-ch">지금</div><div class="nz-ch nz-chy">넙죽이 (개발 중)</div>
+<div class="nz-cl">공지 찾기</div><div class="nz-cn">포탈에 직접 들어가서 찾아봄</div><div class="nz-cy">맞는 공지가 올라오면 알림이 먼저 옴</div>
+<div class="nz-cl">대상 확인</div><div class="nz-cn">공지를 눌러 읽어 봐야 앎</div><div class="nz-cy">내 조건과 맞는 이유를 함께 확인</div>
+<div class="nz-cl">마감 확인</div><div class="nz-cn">공지마다 따로 확인하고 기억함</div><div class="nz-cy">쓰던 AI에게 바로 물어봄</div>
+</div>
+</section>
+<section class="nz-sec">
+<div class="nz-head2"><h2>지금 어디까지 왔나요</h2></div>
+<div class="nz-proof">
+<div class="nz-stats">
+<div><b>50명</b><span>학생 조사 (인터뷰 40 · 설문 10)</span></div>
+<div><b>6/10</b><span>포탈 공지를 거의 확인하지 않음 (인터뷰 10명 기준)</span></div>
+<div><b>4/10</b><span>공지에서 신청 대상인지 파악하기 어려움 (설문 10명 기준)</span></div>
+</div>
+<div class="nz-notes">
+<p>현재 단계: 출시 전, 사전 신청 접수 중</p>
+<p>아이디·비밀번호를 AI나 저희 팀에 넘기지 않는 구조로 만들고 있습니다.</p>
+<p>학생은 무료로 쓰고 대학이 계약하는 방식을 목표로, 학교 담당 부서와의 협의를 준비하고 있습니다. KAIST에서 먼저 검증한 뒤 다른 대학으로 넓힐 계획입니다.</p>
+</div>
+</div>
+</section>
+<section class="nz-final">
+<div class="nz-final-ic"><div class="nz-tile"><svg class="nz-emo" viewBox="0 0 48 48" aria-hidden="true"><path class="ib" d="M18 38h12a6 6 0 0 1-12 0z"/><path class="ia" d="M24 6a13 13 0 0 0-13 13v6.6c0 1.3-.4 2.6-1.1 3.7l-2.2 3.4A2 2 0 0 0 9.4 36h29.2a2 2 0 0 0 1.7-3.3l-2.2-3.4a7 7 0 0 1-1.1-3.7V19A13 13 0 0 0 24 6z"/><path class="is s-w" d="M17 19a7 7 0 0 1 4.5-6.5"/><circle class="ip io" cx="36" cy="11" r="6"/></svg></div><div class="nz-tile"><svg class="nz-emo" viewBox="0 0 48 48" aria-hidden="true"><path class="ia" d="M10 9h22a7 7 0 0 1 7 7v13a7 7 0 0 1-7 7H19l-8 7v-7h-1a7 7 0 0 1-7-7V16a7 7 0 0 1 7-7z"/><path class="is s-w" d="M12.5 22.5l6 6 11-12"/><path class="ip" d="M41 2l1.8 4.2L47 8l-4.2 1.8L41 14l-1.8-4.2L35 8l4.2-1.8z"/></svg></div></div>
+<h2>이번 학기 기회부터<br/>놓치지 마세요</h2>
+<p>이메일과 간단한 정보만 남기면 시범 운영 때 먼저 안내드립니다.</p>
+<a class="nz-btn" href="demo/">시범 화면 써 보기 <span aria-hidden="true">→</span></a>
+</section>
+<footer class="nz-foot"><div class="nz-logo"><svg class="nz-mark" viewBox="0 0 36 36" aria-hidden="true"><rect x="0.5" y="0.5" width="35" height="35" rx="10" fill="#ffffff" stroke="#e6e6ee"/><ellipse cx="18" cy="19" rx="11.5" ry="6.5" fill="#3b6cf6"/></svg><b class="nz-name">넙죽이</b></div>KAIST 스타트업 101(B) 수업에서 1팀이 만들고 있는 서비스입니다. 학교 공식 서비스가 아니며, 지금은 사전 신청만 받고 있습니다. 신청 정보는 출시 안내와 시범 운영 안내에만 사용합니다. 문의: parksw.08@kaist.ac.kr</footer>
+</div></div></div>
+<script>function nzMotion() {
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return () => {};
+  const all = (s, r = document) => Array.from(r.querySelectorAll(s));
+  const one = (s, r = document) => r.querySelector(s);
+  const clamp = (x) => Math.max(0, Math.min(1, x));
+  const seg = (p, a, b) => clamp((p - a) / (b - a));
+  const mix = (a, b, t) => a + (b - a) * t;
+  const ease = (t) => 1 - Math.pow(1 - t, 3);
+  const easeIO = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+  const pop = (t) => 1 + 2.7 * Math.pow(t - 1, 3) + 1.7 * Math.pow(t - 1, 2);
+  const safeHeight = () => {
+    const d = document.createElement("div");
+    d.style.cssText = "position:fixed;top:0;height:100vh;height:100svh;visibility:hidden";
+    document.body.appendChild(d);
+    const h = d.offsetHeight;
+    d.remove();
+    return h || innerHeight;
+  };
 
-<div class="foot">시범 화면 · 실제 공고 아님 · 기관명은 모두 가상입니다 · 스타트업101(B) 1팀</div>
+  const bg = one(".nz-bg"), bar = one(".nz-top"), left = one(".nz-hero > div:first-child"), demo = one(".nz-demo");
+  const specs = [
+    [".nz-sec h2", 56, 0.97, 0],
+    [".nz-card", 84, 0.92, 0.13],
+    [".nz-compare", 70, 0.95, 0],
+    [".nz-proof", 110, 0.86, 0],
+    [".nz-stats > div", 44, 1, 0.13],
+    [".nz-notes", 30, 1, 0.2],
+    [".nz-final", 100, 0.88, 0],
+  ];
 
-<script>
-/* ===== 가상 공지 (virtual_notices_test.md) =====
-   grades: 대상 학년([]=전체) · depts: 대상 학과([]=전체)
-   num: 숫자로 판정하는 조건 {field:'gpa'|'last'|'cum', min, label}
-   extra: 숫자로 못 따지는 조건 → '본인 확인'                    */
-const NOTICES = [
-  {id:"N1", kind:"장학", org:"가나다 학생지원팀", title:"2027년도 봄학기 성적우수 장학생 모집", grades:[2,3], depts:[], num:{field:"gpa",min:3.5,label:"직전 학기 평점 3.5/4.3 이상"}, extra:"", due:"2026-11-27T24:00", amount:"100만 원 (1회)", seats:"20명", docs:"장학생 신청서, 성적증명서, 재학증명서", how:"이메일 제출 (scholar-test@example.com)"},
-  {id:"N2", kind:"장학", org:"라마바 새내기지원센터", title:"2026년도 새내기 생활장학금 신청", grades:[1], depts:["새내기과정학부"], num:null, extra:"타 장학금 중복 수혜 불가", due:"2026-11-20T24:00", amount:"50만 원 (1회)", seats:"30명", docs:"생활장학금 신청서, 재학증명서", how:"이메일 제출 (freshman-test@example.com)"},
-  {id:"N3", kind:"장학", org:"가나다 장학재단", title:"2027년도 이공계 장학생 선발", grades:[3,4], depts:["전산학부","전기및전자공학부"], num:{field:"cum",min:70,label:"누적 이수학점 70학점 이상"}, extra:"", due:"2026-12-04T24:00", amount:"300만 원 (월 30만 원 × 10개월)", seats:"추천 10명", docs:"신청서, 성적증명서, 재학증명서, 개인정보활용동의서", how:"이메일 제출 (foundation-test@example.com)"},
-  {id:"N4", kind:"연구", org:"아자차 인공지능연구실", title:"겨울학기 학부연구생 모집", grades:[2,3,4], depts:["전산학부"], num:null, extra:"겨울방학 8주 전일 참여 가능", due:"2026-11-25T18:00", amount:"월 60만 원", seats:"4명", docs:"학부연구생 지원서, 자기소개서", how:"이메일 제출 (ailab-test@example.com)"},
-  {id:"N5", kind:"연구", org:"카타파 로봇연구소", title:"2027년도 학부생 연구 인턴 모집", grades:[3,4], depts:["기계공학과","전기및전자공학부"], num:null, extra:"주 10시간 이상 참여 가능", due:"2026-12-11T24:00", amount:"월 40만 원", seats:"6명", docs:"연구 인턴 지원서, 성적증명서", how:"이메일 제출 (robot-test@example.com)"},
-  {id:"N6", kind:"연구", org:"하하하 기초과학연구단", title:"새내기 연구 체험 프로그램 참가자 모집", grades:[1], depts:[], num:null, extra:"지도교수 추천서 1부 제출 가능", due:"2026-11-18T24:00", amount:"활동비 20만 원", seats:"15명", docs:"참가 신청서, 지도교수 추천서", how:"이메일 제출 (science-test@example.com)"},
-  {id:"N7", kind:"근로", org:"거너더 도서관", title:"겨울학기 도서관 근로학생 모집", grades:[], depts:[], num:null, extra:"평일 주 8시간 근무 가능", due:"2026-11-17T18:00", amount:"시간당 12,000원", seats:"8명", docs:"근로학생 신청서, 근무 가능 시간표", how:"이메일 제출 (library-test@example.com)"},
-  {id:"N8", kind:"근로", org:"머버서 전산실", title:"2027년도 봄학기 전산실 근로학생 모집", grades:[2,3,4], depts:["전산학부"], num:{field:"last",min:15,label:"직전 학기 15학점 이상 이수"}, extra:"", due:"2026-11-30T24:00", amount:"시간당 13,000원", seats:"3명", docs:"근로학생 신청서, 성적증명서", how:"이메일 제출 (itroom-test@example.com)"},
-];
-const KLMS_LINE = "참고로 KLMS에도 새 공지 1건이 있어요 — 가나다개론(가상) 과제 3, 11/20(금) 23:59 마감.";
-const FIELD = {gpa:"평점", last:"직전 학기 학점", cum:"누적 이수학점"};
+  const scene = one(".nz-scene"), stage = one(".nz-stage");
+  const wall = one(".nz-wall", stage), light = one(".nz-light", stage), sh = one(".nz-sh", stage);
+  const scrimC = one(".nz-scrim-c", stage), scrimS = one(".nz-scrim-s", stage);
+  const caps = one(".nz-caps", stage), capEls = all(".nz-cap", stage), chips = all(".nz-cc span", stage);
+  const panel = one(".nz-panel", stage), sc = one(".nz-sc", stage), slot = one(".nz-slot", stage), ring = one(".nz-ph svg", stage);
+  const me = one(".nz-me", stage), ai = one(".nz-ai", stage), typed = one(".nz-type", stage);
+  const rows = all(".nz-m", stage);
+  const full = one(".nz-ghost", stage).textContent;
 
-const $ = s => document.querySelector(s);
-const state = {grade:"", dept:"", gpa:"", last:"", cum:"", interest:new Set(), channel:"푸시"};
-const KEY = "nubzuki-demo-profile";
+  const TITLES = ["셔틀버스 시간표 변경 안내", "도서관 휴관일 안내", "무선 네트워크 작업 안내", "학과 설명회 개최 안내", "체육시설 휴관 안내", "주차장 이용 통제 안내", "학습법 특강 수강생 모집", "출입증 발급 FAQ", "세미나 개최 안내", "보안 업데이트 권고", "기숙사 시설 점검 안내", "건강검진 일정 안내", "동아리 박람회 안내", "교류 프로그램 설명회", "창업 특강 안내", "식당 운영시간 변경", "시험방송 실시 안내", "설문조사 참여 요청", "우편물 수령 안내", "강당 사용 안내", "안전교육 이수 안내", "전시회 관람 안내", "걷기 캠페인 안내", "포스터 부착 안내"];
+  const BOARDS = ["통합공지", "시설", "IT서비스", "세미나/행사", "체육", "학사"];
+  const SPEEDS = [1, 0.6, 1.3, 0.8, 1.15, 0.65, 1.25, 0.9];
 
-/* ---- 로컬 저장 (휴대폰 안에만) ---- */
-function save(){ try{ localStorage.setItem(KEY, JSON.stringify({...state, interest:[...state.interest]})); }catch(e){} }
-function load(){
-  try{ const d=JSON.parse(localStorage.getItem(KEY)||"null"); if(!d) return;
-    Object.assign(state,d); state.interest=new Set(d.interest||[]); }catch(e){}
-}
-function wipe(){ try{ localStorage.removeItem(KEY); }catch(e){} location.hash=""; location.reload(); }
+  let items = [], vh = 800, wide = true, cur = scrollY, raf = 0, last = 0, lastW = 0, lastH = 0;
+  let W = 0, H = 0, stageH = 0, sTop = 0, sH = 1, cols = [], cards = [], marks = [];
+  let drift = 0, colTop = 0, rowH = 68, typedN = -1, wallOn = true, filterDirty = true, clipped = true;
 
-/* ---- 마감 ---- */
-function dueDate(s){ const [d,t]=s.split("T"); const [h,m]=t.split(":").map(Number); const x=new Date(d+"T00:00:00"); x.setHours(h,m); return x; }
-function dday(n){ const ms=dueDate(n.due)-new Date(); if(ms<0) return null; return Math.max(0,Math.floor(ms/864e5)); }
-function dueText(n){ const d=dueDate(n.due); d.setMinutes(d.getMinutes()-1); const w="일월화수목금토"[d.getDay()]; return `${d.getMonth()+1}/${d.getDate()}(${w}) ${n.due.endsWith("24:00")?"24시":n.due.slice(11)}`; }
+  const buildWall = (cw, ch, gap) => {
+    wall.innerHTML = "";
+    wall.style.setProperty("--cw", cw + "px");
+    wall.style.setProperty("--ch", ch + "px");
+    wall.style.setProperty("--gap", gap + "px");
+    const count = Math.min(8, Math.ceil((W + cw) / (cw + gap)));
+    const startX = (W - (count * cw + (count - 1) * gap)) / 2;
+    const narrow = W <= 860;
+    drift = H * (narrow ? 0.35 : 0.5);
+    colTop = -drift * 1.3;
+    const rowCount = Math.ceil((stageH - colTop) / (ch + gap)) + 1;
+    const dAt = 0.8;
+    const targets = narrow ? [[0.5, 0.5], [0.16, 0.68], [0.84, 0.84]] : [[0.58, 0.28], [0.8, 0.56], [0.66, 0.8]];
+    marks = targets.map(([fx, fy], i) => {
+      const c = Math.max(0, Math.min(count - 1, Math.round((fx * W - startX - cw / 2) / (cw + gap))));
+      const r = Math.max(0, Math.min(rowCount - 1, Math.round((fy * H - colTop - dAt * drift * SPEEDS[c]) / (ch + gap))));
+      return { c, r, x: startX + c * (cw + gap), y: colTop + r * (ch + gap), speed: SPEEDS[c], cw, ch };
+    });
+    cols = []; cards = [];
+    for (let c = 0; c < count; c++) {
+      const col = document.createElement("div");
+      col.className = "nz-col";
+      for (let r = 0; r < rowCount; r++) {
+        const card = document.createElement("div");
+        card.className = "nz-n";
+        if (marks.some((m) => m.c === c && m.r === r)) card.style.visibility = "hidden";
+        else {
+          const k = (c * 7 + r * 5) % TITLES.length;
+          const title = document.createElement("b");
+          title.textContent = TITLES[k];
+          const meta = document.createElement("small");
+          meta.textContent = BOARDS[(c + r * 3) % BOARDS.length];
+          card.append(title, meta);
+          cards.push({ el: card, d: (((c * 37 + r * 61) % 17) / 17) * 0.08 });
+        }
+        col.appendChild(card);
+      }
+      wall.appendChild(col);
+      cols.push({ el: col, x: startX + c * (cw + gap), speed: SPEEDS[c] });
+    }
+    filterDirty = true; wallOn = true; wall.style.visibility = "";
+  };
 
-/* ---- 판정 (휴대폰 안에서) ---- */
-function judge(n){
-  const g=Number(state.grade), checks=[];
-  let s="ok";
-  const down = v => { const r={ok:0,warn:1,no:2}; if(r[v]>r[s]) s=v; };
-  if(dday(n)===null){ return {s:"no",label:"마감됨",checks:[{s:"no",t:"접수 기간이 끝났어요"}]}; }
-  if(n.grades.length && !n.grades.includes(g)){
-    const gs=n.grades.length===1?`${n.grades[0]}학년만`:`${Math.min(...n.grades)}~${Math.max(...n.grades)}학년만`;
-    checks.push({s:"no",t:`✕ 학년: ${gs} (나: ${g}학년)`}); down("no");
-  } else checks.push({s:"ok",t:`✓ 학년: ${n.grades.length?`${Math.min(...n.grades)}~${Math.max(...n.grades)}학년`.replace(/^(\d)~\1/,"$1"):"전 학년"}`});
-  if(n.depts.length && !n.depts.includes(state.dept)){
-    checks.push({s:"no",t:`✕ 학과: ${n.depts.join("·")}만`}); down("no");
-  } else checks.push({s:"ok",t:`✓ 학과: ${n.depts.length?state.dept:"전체 학과"}`});
-  if(n.num){
-    const v=state[n.num.field];
-    if(v===""||v==null){ checks.push({s:"warn",t:`? ${n.num.label} — ${FIELD[n.num.field]}을 입력하면 바로 판정해요`}); down("warn"); }
-    else if(Number(v)>=n.num.min){ checks.push({s:"ok",t:`✓ ${n.num.label} (나: ${v})`}); }
-    else { checks.push({s:"no",t:`✕ ${n.num.label} (나: ${v})`}); down("no"); }
-  }
-  if(n.extra){ checks.push({s:"warn",t:`? 본인 확인: ${n.extra}`}); down("warn"); }
-  const label={ok:"지원 가능",warn:"확인 필요",no:"대상 아님"}[s];
-  return {s,label,checks};
-}
-function results(){
-  const r={ok:0,warn:1,no:2};
-  return NOTICES.filter(n=>state.interest.has(n.kind)).map(n=>({n,j:judge(n)}))
-    .sort((a,b)=>r[a.j.s]-r[b.j.s] || dueDate(a.n.due)-dueDate(b.n.due));
-}
+  const layoutScene = (rebuild) => {
+    scene.classList.add("nz-live");
+    W = stage.clientWidth; stageH = stage.offsetHeight; H = Math.min(vh, stageH);
+    const narrow = W <= 860;
+    const CW = Math.min(W - 40, Math.max(1240, W * 0.84)), x0 = (W - CW) / 2;
+    const cw = narrow ? 168 : Math.round(Math.max(220, Math.min(340, W / 5.2)));
+    const ch = narrow ? 72 : Math.round(cw * 0.36);
+    if (rebuild) buildWall(cw, ch, narrow ? 10 : 14);
 
-function show(id){ document.querySelectorAll(".screen").forEach(s=>s.classList.remove("on")); $(id).classList.add("on"); window.scrollTo(0,0); }
+    const pw = narrow ? W - 32 : Math.min(CW * 0.5, Math.max(580, H * 0.72));
+    panel.style.width = pw + "px";
+    panel.style.left = (narrow ? 16 : x0 + CW - pw) + "px";
+    caps.style.left = (narrow ? 16 : x0) + "px";
+    caps.style.width = (narrow ? W - 32 : CW - pw - 56) + "px";
+    sc.style.display = "";
+    const capH = Math.max(capEls[1].offsetHeight, capEls[2].offsetHeight);
+    const avail = narrow ? H - 72 - capH - 14 - 14 : H - 96;
+    const gap = narrow ? 6 : 8;
+    const fit = () => {
+      slot.style.height = "0px";
+      return (avail - panel.offsetHeight - 2 * gap) / 3;
+    };
+    let rh = fit();
+    if (rh < 50 && narrow) { sc.style.display = "none"; rh = fit(); }
+    rowH = Math.round(Math.max(44, Math.min(Math.max(narrow ? 62 : 72, H * (narrow ? 0.095 : 0.09)), rh)));
+    slot.style.height = 3 * rowH + 2 * gap + "px";
+    const pH = panel.offsetHeight;
+    const capTop = 72 + Math.max(0, (avail - pH) / 2);
+    capEls.forEach((el) => { el.style.top = narrow ? capTop + "px" : Math.max(84, (H - el.offsetHeight) / 2) + "px"; });
+    panel.style.top = (narrow ? capTop + capH + 14 : Math.max(80, (H - pH) / 2 + 8)) + "px";
+    const t = Math.min(Math.max(40, rowH * 0.58), rowH - 14);
+    rows.forEach((el, i) => {
+      el.style.setProperty("--t", t + "px");
+      el.style.setProperty("--fs", (rowH < 54 ? 14 : Math.max(15, rowH * 0.2)) + "px");
+      marks[i].rx = panel.offsetLeft + panel.clientLeft + slot.offsetLeft;
+      marks[i].ry = panel.offsetTop + panel.clientTop + slot.offsetTop + i * (rowH + gap);
+      marks[i].rw = slot.offsetWidth;
+    });
+    sh.style.top = (H - sh.offsetHeight) / 2 + "px";
+    const rect = scene.getBoundingClientRect();
+    sTop = rect.top + scrollY; sH = scene.offsetHeight;
+  };
 
-/* ---- 화면 1 ---- */
-function fillForm(){
-  $("#grade").value=state.grade; $("#dept").value=state.dept;
-  $("#gpa").value=state.gpa; $("#last").value=state.last; $("#cum").value=state.cum;
-  state.interest.forEach(v=>{ if(!document.querySelector(`#interest .chip[data-v="${CSS.escape(v)}"]`)) addChip(v); });
-  document.querySelectorAll("#interest .chip[data-v]").forEach(c=>c.classList.toggle("on",state.interest.has(c.dataset.v)));
-  document.querySelectorAll("#channel .chip").forEach(c=>c.classList.toggle("on",c.dataset.v===state.channel));
-}
-function bindChip(c){
-  c.onclick=()=>{ const v=c.dataset.v; state.interest.has(v)?state.interest.delete(v):state.interest.add(v); c.classList.toggle("on"); checkReady(); };
-}
-function addChip(v){
-  const c=document.createElement("button"); c.className="chip"; c.dataset.v=v; c.textContent=v;
-  $("#interest").insertBefore(c,$("#addInterest")); bindChip(c); return c;
-}
-function checkReady(){
-  const ok=state.grade&&state.dept&&state.interest.size>0;
-  $("#start").disabled=!ok; $("#startHint").style.visibility=ok?"hidden":"visible";
-}
-["grade","dept","gpa","last","cum"].forEach(k=>$("#"+k).addEventListener("input",e=>{state[k]=e.target.value;checkReady();}));
-document.querySelectorAll("#interest .chip[data-v]").forEach(bindChip);
-$("#addInterest").onclick=()=>{ $("#addRow").classList.toggle("on"); $("#addInput").focus(); };
-function commitAdd(){
-  const v=$("#addInput").value.trim(); if(!v) return;
-  let c=document.querySelector(`#interest .chip[data-v="${CSS.escape(v)}"]`) || addChip(v);
-  state.interest.add(v); c.classList.add("on");
-  $("#addInput").value=""; $("#addRow").classList.remove("on"); checkReady();
-}
-$("#addOk").onclick=commitAdd;
-$("#addInput").addEventListener("keydown",e=>{ if(e.key==="Enter"){ e.preventDefault(); commitAdd(); } });
-document.querySelectorAll("#channel .chip").forEach(c=>c.onclick=()=>{ state.channel=c.dataset.v; fillForm(); });
-$("#wipe").onclick=wipe;
+  const paintScene = () => {
+    if (cur + stageH < sTop - 60 || cur > sTop + sH + 60) return;
+    const pin = sH - stageH;
+    const p = clamp((cur - sTop) / pin);
+    const e = ease(seg(cur, sTop - stageH, sTop));
+    if (e < 1) {
+      stage.style.clipPath = `inset(0 ${(1 - e) * Math.max(16, (W - 1240) / 2)}px round ${32 * (1 - e)}px)`;
+      clipped = true;
+    } else if (clipped) { stage.style.clipPath = ""; clipped = false; }
 
-function profileHash(){
-  const p=new URLSearchParams({g:state.grade,d:state.dept,i:[...state.interest].join(",")});
-  ["gpa","last","cum"].forEach(k=>{ if(state[k]) p.set(k,state[k]); });
-  return "#"+p.toString();
-}
-/* 진짜 푸시: 서버 없이 휴대폰이 스스로 알림을 띄움 (안드로이드·PC 크롬 / 아이폰은 홈 화면에 추가했을 때만) */
-async function tryPush(title, body){
-  try{
-    if(!("Notification" in window) || !("serviceWorker" in navigator)) return false;
-    let perm=Notification.permission;
-    if(perm==="default") perm=await Notification.requestPermission();
-    if(perm!=="granted") return false;
-    const reg=await navigator.serviceWorker.register("sw.js");
-    await navigator.serviceWorker.ready;
-    const url=location.href.split("#")[0]+profileHash();
-    setTimeout(()=>reg.showNotification(title,{body, icon:"icon.png", badge:"icon.png", tag:"nubzuki-demo", data:{url}}),2200);
-    return true;
-  }catch(e){ return false; }
-}
-$("#start").onclick=async()=>{
-  save();
-  const n=results().filter(r=>r.j.s!=="no").length;
-  const title = n?`조건에 맞는 기회 ${n}건 발견!`:"새 공지가 올라왔어요";
-  $("#bannerText").textContent=title;
-  let pushed=false;
-  if(state.channel==="푸시") pushed=await tryPush("넙죽이 · "+title,"학년·학과·평점·이수학점까지 확인했어요");
-  $("#chName").textContent = state.channel==="푸시"?"푸시 알림":state.channel;
-  show("#sWait");
-  if(state.channel==="푸시" && !pushed) toast("이 기기는 푸시가 막혀 있어 화면 알림으로 보여 드려요");
-  setTimeout(()=>$("#banner").classList.add("show"), pushed?3200:2200);
-};
-$("#banner").onclick=()=>{ $("#banner").classList.remove("show"); renderList(); show("#s2"); };
+    const l = easeIO(seg(p, 0.4, 0.5));
+    light.style.opacity = String(l);
+    const tint = clamp(l / 0.6);
+    stage.style.backgroundColor = `rgb(${mix(17, 62, tint)},${mix(17, 56, tint)},${mix(19, 190, tint)})`;
+    caps.style.setProperty("--l", String(l));
 
-/* ---- 화면 2 ---- */
-function profileText(){
-  const extra=[state.gpa&&`평점 ${state.gpa}`,state.last&&`직전 ${state.last}학점`,state.cum&&`누적 ${state.cum}학점`].filter(Boolean).join(" · ");
-  return `<b>${state.grade}학년 · ${state.dept}</b>${extra?" · "+extra:""}<br>관심: ${[...state.interest].join(", ")} · 🔒 이 휴대폰에서만 판정`;
-}
-function cardHTML(n,j,full){
-  const d=dday(n);
-  return `<div class="row"><span class="badge ${j.s}">${j.label}</span><span class="dday${d!==null&&d<=3?" soon":""}">${d===null?"마감":d===0?"오늘 마감":`D-${d}`}</span><span class="kind">${n.kind}</span>${!full&&j.s!=="no"?'<span class="go">›</span>':""}</div>
-    <h3>${n.title}</h3><div class="org">${n.org} · ${n.amount}</div>
-    <div class="checks">${j.checks.map(c=>`<span class="${c.s}">${c.t}</span>`).join("")}</div>
-    ${full?`<div class="facts"><span>마감</span><b>${dueText(n)}</b><span>인원</span><b>${n.seats}</b><span>서류</span><b>${n.docs}</b><span>접수</span><b>${n.how}</b></div>`:""}`;
-}
-function renderList(){
-  const rs=results(), n=rs.filter(r=>r.j.s!=="no").length;
-  $("#matchTitle").textContent=`${n}건이 조건과 맞아요`;
-  $("#profileLine").innerHTML=profileText();
-  const box=$("#list"); box.innerHTML=""; let hdr=false;
-  if(!rs.length){ box.innerHTML=`<div class="empty">선택한 관심 분야에 맞는 공지가 아직 없어요.<br>새 공지가 올라오면 바로 알려 드릴게요.</div>`; }
-  rs.forEach(({n,j})=>{
-    if(j.s==="no"&&!hdr){ box.insertAdjacentHTML("beforeend",`<div class="sec">대상이 아닌 공지</div>`); hdr=true; }
-    const el=document.createElement("div"); el.className="card"+(j.s==="no"?" no":"");
-    el.innerHTML=cardHTML(n,j,false);
-    if(j.s!=="no") el.onclick=()=>openDetail(n,j);
-    box.appendChild(el);
-  });
-}
-$("#edit").onclick=()=>{ fillForm(); checkReady(); show("#s1"); };
+    const d = clamp((cur - (sTop - stageH)) / (stageH + 0.5 * pin));
+    const on = p < 0.47;
+    const wallFade = (1 - 0.45 * seg(p, 0.1, 0.24)) * (1 - seg(p, 0.4, 0.44));
+    if (on !== wallOn) { wall.style.visibility = on ? "" : "hidden"; wallOn = on; }
+    if (on) {
+      cols.forEach((c) => { c.el.style.transform = `translate3d(${c.x}px,${colTop + d * drift * c.speed}px,0)`; });
+      wall.style.opacity = String(wallFade);
+      if (p > 0.28 || filterDirty) {
+        cards.forEach((k) => {
+          const a = clamp((p - 0.3 - k.d) / 0.06);
+          k.el.style.opacity = String(1 - a);
+          k.el.style.transform = a ? `scale(${1 - 0.1 * a})` : "";
+        });
+        filterDirty = p > 0.28;
+      }
+    }
 
-/* ---- 화면 3 ---- */
-function aiAnswer(n,j){
-  const d=dday(n);
-  const okParts=[`${state.grade}학년`, state.dept];
-  if(n.num && state[n.num.field]!=="" && Number(state[n.num.field])>=n.num.min) okParts.push(`${FIELD[n.num.field]} ${state[n.num.field]}`);
-  let a = j.s==="ok"
-    ? `네, 지원할 수 있어요. ${okParts.join(" · ")}라서 조건이 모두 맞아요.`
-    : `${okParts.join(" · ")} 기준으로는 맞아요. 다만 아래는 직접 확인해 주세요.<br>` +
-      j.checks.filter(c=>c.s==="warn").map(c=>"· "+c.t.replace(/^\? /,"")).join("<br>");
-  a += `<br><br>마감은 <b>${dueText(n)}</b> (${d}일 남음)이고, 준비 서류는 <b>${n.docs}</b>예요.`;
-  return a;
-}
-function openDetail(n,j){
-  $("#detail").innerHTML=cardHTML(n,j,true);
-  const chat=$("#chat"); chat.innerHTML=`<div class="me">이거 나도 돼?</div><div class="ai typing"><span class="dots"><i></i><i></i><i></i></span></div>`;
-  $("#actions").style.display="none"; show("#s3");
-  setTimeout(()=>{ const a=chat.lastElementChild; a.className="ai"; a.innerHTML=aiAnswer(n,j)+`<span class="klms">${KLMS_LINE}</span>`; $("#actions").style.display="block"; },1100);
-}
-$("#back").onclick=()=>show("#s2");
-$("#apply").onclick=()=>$("#modal").classList.add("on");
-$("#modalOk").onclick=()=>$("#modal").classList.remove("on");
-$("#share").onclick=async()=>{
-  const url=location.href.split("#")[0];   // 내 정보(#…)는 빼고 공유
-  try{ if(navigator.share){ await navigator.share({title:"넙죽이 시범 화면",url}); return; } }catch(e){}
-  try{ await navigator.clipboard.writeText(url); toast("링크를 복사했어요"); }catch(e){ toast(url); }
-};
-function toast(t){ const el=$("#toast"); el.textContent=t; el.classList.add("on"); setTimeout(()=>el.classList.remove("on"),1800); }
+    const hOut = seg(p, 0.07, 0.14);
+    sh.style.opacity = String(1 - hOut);
+    sh.style.transform = `translateY(${-hOut * 48}px) scale(${1 - 0.05 * hOut})`;
+    scrimC.style.opacity = String(1 - seg(p, 0.08, 0.16));
 
-/* ---- 시작 ----
-   다음 주 실험용: 카톡 링크로 화면 2 바로 열기
-   예) …/#g=2&d=전산학부&i=장학,연구&gpa=3.6&last=18&cum=40
-   (#뒤 값은 서버로 전송되지 않음)                                  */
-load();
-(function(){
-  const h=new URLSearchParams(location.hash.slice(1));
-  if(h.get("g")&&h.get("d")&&h.get("i")){
-    state.grade=h.get("g"); state.dept=h.get("d"); state.interest=new Set(h.get("i").split(","));
-    state.gpa=h.get("gpa")||""; state.last=h.get("last")||""; state.cum=h.get("cum")||"";
-    fillForm(); checkReady(); renderList(); show("#s2"); return;
-  }
-  fillForm(); checkReady();
-})();
-</script>
+    const windows = [[0.13, 0.19, 0.36, 0.4], [0.5, 0.56, 0.65, 0.69], [0.7, 0.76, 2, 3]];
+    capEls.forEach((el, i) => {
+      const [a, b, c, f] = windows[i];
+      const inn = ease(seg(p, a, b)), out = seg(p, c, f);
+      el.style.opacity = String(inn * (1 - out));
+      el.style.transform = `translateY(${(1 - inn) * 30 - out * 30}px)`;
+    });
+    scrimS.style.opacity = String(ease(seg(p, 0.12, 0.2)) * (1 - seg(p, 0.38, 0.46)));
+    chips.forEach((el, i) => {
+      const t = seg(p, 0.19 + i * 0.03, 0.23 + i * 0.03);
+      el.style.opacity = String(t);
+      el.style.transform = `scale(${mix(0.7, 1, pop(t))})`;
+    });
+
+    const pe = ease(seg(p, 0.36, 0.48));
+    panel.style.opacity = String(ease(seg(p, 0.36, 0.41)));
+    panel.style.transform = `translateY(${(1 - pe) * 44}px) scale(${0.94 + 0.06 * pe})`;
+    const r = seg(p, 0.53, 0.61);
+    ring.style.transform = r > 0 && r < 1 ? `rotate(${Math.sin(r * Math.PI * 5) * 16 * (1 - r)}deg)` : "";
+
+    const g = ease(seg(p, 0.28, 0.34));
+    rows.forEach((el, i) => {
+      const k = marks[i];
+      const o = i * 0.015;
+      const f = easeIO(seg(p, 0.4 + o, 0.54 + o));
+      const w = ease(seg(p, 0.38 + o, 0.44 + o));
+      const sx = ease(seg(p, 0.47 + o, 0.53 + o));
+      const m = seg(p, 0.51 + o, 0.58 + o);
+      const x = mix(k.x, k.rx, f);
+      const y = mix(k.y + d * drift * k.speed, k.ry, f);
+      el.style.transform = `translate3d(${x}px,${y}px,0)`;
+      el.style.width = mix(k.cw, k.rw, f) + "px";
+      el.style.height = mix(k.ch, rowH, f) + "px";
+      el.style.setProperty("--m", String(m));
+      el.style.setProperty("--x", String(sx));
+      el.style.setProperty("--w", String(w));
+      const a = mix(0.06, 1, w), v = mix(255, 244, m), bl = mix(255, 251, m);
+      el.style.background = `rgba(${v},${v},${bl},${a})`;
+      const ink = w > 0 ? mix(255, 17, w) : mix(190, 255, g);
+      el.style.color = `rgb(${ink},${ink},${ink})`;
+      el.style.zIndex = g > 0 ? "4" : "1";
+      el.style.opacity = String(g > 0 || !on ? 1 : wallFade);
+      el.style.borderColor = `rgba(150,142,255,${g * (1 - m)})`;
+      el.style.boxShadow = `0 0 ${36 * g}px rgba(99,91,255,${0.65 * g * (1 - m)})`;
+    });
+
+    const m1 = ease(seg(p, 0.7, 0.74)), m2 = ease(seg(p, 0.76, 0.8));
+    me.style.opacity = String(m1);
+    me.style.transform = `translateY(${(1 - m1) * 14}px)`;
+    ai.style.opacity = String(m2);
+    ai.style.transform = `translateY(${(1 - m2) * 14}px)`;
+    const n = Math.round(full.length * seg(p, 0.77, 0.9));
+    if (n !== typedN) { typed.textContent = full.slice(0, n); typedN = n; }
+  };
+
+  const measure = (rebuild) => {
+    vh = safeHeight(); wide = innerWidth > 860; lastW = innerWidth; lastH = innerHeight;
+    bg.style.position = bg.offsetHeight <= vh + 2 ? "sticky" : "relative";
+    layoutScene(rebuild);
+    items = [];
+    specs.forEach(([sel]) => all(sel).forEach((el) => { el.style.transform = ""; el.style.opacity = ""; }));
+    specs.forEach(([sel, y, scale, stagger]) => all(sel).forEach((el) => {
+      const i = Array.from(el.parentElement.children).indexOf(el) % 3;
+      el.style.willChange = "transform, opacity";
+      items.push({ el, top: el.getBoundingClientRect().top + scrollY, y, scale, delay: wide ? i * stagger : 0 });
+    }));
+  };
+
+  const paint = () => {
+    const h = clamp(cur / (vh * 0.9));
+    left.style.transform = `translateY(${-h * vh * 0.1}px) scale(${1 - 0.06 * h})`;
+    left.style.opacity = String(clamp(1 - h * 1.15));
+    demo.style.transform = `translateY(${-h * vh * 0.2}px) scale(${1 - 0.1 * h})`;
+    demo.style.opacity = String(clamp(1 - h * 0.85));
+    bg.style.visibility = cur > vh * 1.25 ? "hidden" : "";
+    bar.style.setProperty("--s", String(ease(clamp(cur / 160))));
+    items.forEach((it) => {
+      const p = ease(clamp((vh * 1.02 - (it.top - cur)) / (vh * (wide ? 0.42 : 0.34)) - it.delay));
+      it.el.style.transform = `translateY(${(1 - p) * it.y}px) scale(${it.scale + (1 - it.scale) * p})`;
+      it.el.style.opacity = String(p);
+    });
+    paintScene();
+  };
+
+  const tick = (now) => {
+    const dt = Math.min(50, now - (last || now)); last = now;
+    const target = scrollY;
+    cur += (target - cur) * (1 - Math.exp(-dt * 0.009));
+    if (Math.abs(target - cur) < 0.3) cur = target;
+    paint();
+    if (cur !== target) raf = requestAnimationFrame(tick); else { raf = 0; last = 0; }
+  };
+  const wake = () => { if (!raf) raf = requestAnimationFrame(tick); };
+  const refresh = () => { measure(true); paint(); wake(); };
+  const resize = () => {
+    if (innerWidth === lastW && Math.abs(innerHeight - lastH) < 160) return;
+    refresh();
+  };
+  measure(true); paint();
+  addEventListener("scroll", wake, { passive: true });
+  addEventListener("resize", resize);
+  addEventListener("load", refresh);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { if (scene.isConnected) refresh(); });
+  return () => {
+    cancelAnimationFrame(raf);
+    removeEventListener("scroll", wake); removeEventListener("resize", resize); removeEventListener("load", refresh);
+    wall.innerHTML = ""; typed.textContent = full; scene.classList.remove("nz-live");
+  };
+}
+;nzMotion();</script>
+
 </body>
 </html>

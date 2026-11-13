@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>넙죽이 시범 화면</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="icon" href="icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#4f46e5">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root{
+  --accent:#4f46e5; --accent-soft:#eeeefc; --accent-ink:#3f3a9e;
+  --text:#111113; --muted:#62626e; --line:#e6e6ee; --soft:#f4f4fb;
+  --ok:#15803d; --ok-soft:#e7f6ec; --warn:#b45309; --warn-soft:#fff3e0; --no:#8b8b96; --no-soft:#f0f0f4;
+  --blob:#3b6cf6;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:linear-gradient(160deg,#f1f1ff,#f8f7fc) fixed;color:var(--text);font-family:Pretendard,-apple-system,"Apple SD Gothic Neo",sans-serif}
+.app{max-width:440px;margin:0 auto;min-height:100vh;padding:18px 16px 90px}
+.top{display:flex;align-items:center;gap:9px;margin-bottom:20px}
+.logo{width:34px;height:34px;border-radius:10px;background:#fff;display:grid;place-items:center;box-shadow:0 1px 0 var(--line),0 2px 8px rgba(79,70,229,.12);border:1px solid var(--line);flex:none}
+.logo i{display:block;width:22px;height:13px;border-radius:50%;background:var(--blob)}
+.top b{font-size:17px;letter-spacing:-.2px}
+.pill{margin-left:auto;font-size:11px;color:var(--muted);background:#fff;border:1px solid var(--line);padding:4px 10px;border-radius:999px}
+h1{font-size:23px;margin:2px 0 6px;letter-spacing:-.4px}
+.lead{color:var(--muted);font-size:14px;margin:0 0 6px;line-height:1.55}
+.panel{background:#fff;border:1px solid var(--line);border-radius:24px;padding:18px 16px;margin-top:14px}
+label.f{display:block;font-size:13px;font-weight:700;margin:14px 0 8px}
+label.f:first-child{margin-top:0}
+label.f span{font-weight:400;color:var(--muted)}
+input::placeholder{color:#b9b9c6}
+select,input{width:100%;padding:13px 12px;border:1.5px solid var(--line);border-radius:14px;font-size:15px;background:#fff;font-family:inherit;color:var(--text);outline:none}
+select:focus,input:focus{border-color:var(--accent)}
+select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,#999 50%),linear-gradient(135deg,#999 50%,transparent 50%);background-position:calc(100% - 18px) 50%,calc(100% - 13px) 50%;background-size:5px 5px;background-repeat:no-repeat}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.grid3 small{display:block;font-size:11px;color:var(--muted);margin-bottom:5px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:9px 16px;font-size:14px;cursor:pointer;font-family:inherit;color:var(--text)}
+.chip.on{background:var(--accent-soft);border-color:var(--accent);color:var(--accent-ink);font-weight:700}
+.chip.add{border-style:dashed;color:var(--accent);font-weight:700;padding:9px 14px}
+.addrow{display:none;gap:8px;margin-top:8px}.addrow.on{display:flex}
+.addrow input{padding:10px 12px;font-size:14px}.addrow .chip{flex:none}
+.lock{display:flex;gap:8px;align-items:flex-start;background:var(--soft);border-radius:14px;padding:11px 12px;font-size:12.5px;color:var(--muted);line-height:1.5;margin-top:14px}
+.btn{display:block;width:100%;border:0;border-radius:999px;padding:15px;font-size:16px;font-weight:700;font-family:inherit;cursor:pointer;margin-top:12px}
+.btn.primary{background:var(--accent);color:#fff}
+.btn.primary:disabled{background:#c9c8ea;cursor:not-allowed}
+.btn.ghost{background:#fff;color:var(--text);border:1.5px solid var(--line)}
+.btn.link{background:none;color:var(--muted);font-size:13px;font-weight:500;padding:8px;margin-top:4px}
+.hint{font-size:12px;color:var(--muted);text-align:center;margin-top:8px}
+.screen{display:none}.screen.on{display:block;animation:fade .25s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.wait{text-align:center;padding:70px 10px;color:var(--muted);line-height:1.6}
+.wait .logo{width:64px;height:64px;border-radius:18px;margin:0 auto 18px}
+.wait .logo i{width:40px;height:23px;animation:bob 1.4s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-3px) scaleX(1.05)}}
+.banner{position:fixed;left:50%;top:-150px;transform:translateX(-50%);width:min(420px,calc(100% - 20px));background:rgba(255,255,255,.97);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-radius:20px;box-shadow:0 12px 32px rgba(30,27,75,.18);padding:12px 14px;display:flex;gap:11px;align-items:center;cursor:pointer;transition:top .45s cubic-bezier(.2,.9,.3,1.2);z-index:20;border:1px solid var(--line)}
+.banner.show{top:12px}
+.banner small{display:block;color:var(--muted);font-size:12px;margin-bottom:2px}
+.banner strong{font-size:14px;display:block}
+.banner em{font-style:normal;font-size:12.5px;color:var(--accent-ink)}
+.summary{background:#fff;border:1px solid var(--line);border-radius:16px;padding:11px 14px;font-size:13px;color:var(--muted);margin:10px 0 4px;line-height:1.5}
+.summary b{color:var(--text)}
+.card{background:#fff;border:1.5px solid var(--line);border-radius:20px;padding:14px;margin:10px 0;cursor:pointer;transition:transform .1s}
+.card:active{transform:scale(.985)}
+.card.no{opacity:.62;cursor:default}
+.row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.badge{font-size:12px;font-weight:800;padding:4px 10px;border-radius:999px}
+.badge.ok{background:var(--ok-soft);color:var(--ok)}
+.badge.warn{background:var(--warn-soft);color:var(--warn)}
+.badge.no{background:var(--no-soft);color:var(--no)}
+.dday{font-size:12px;font-weight:700;color:var(--muted)}
+.kind{margin-left:auto;font-size:11px;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:2px 8px}
+.card h3{font-size:15px;margin:2px 0 4px;line-height:1.4}
+.org{font-size:12px;color:var(--muted)}
+.checks{margin-top:9px;padding-top:9px;border-top:1px dashed var(--line);font-size:12.5px;display:flex;flex-direction:column;gap:3px}
+.checks .ok{color:var(--ok)}.checks .warn{color:var(--warn)}.checks .no{color:var(--no)}
+.sec{font-size:13px;font-weight:700;color:var(--muted);margin:22px 0 4px}
+.back{background:none;border:0;color:var(--muted);font-size:14px;padding:0;margin-bottom:12px;cursor:pointer;font-family:inherit}
+.facts{font-size:13px;color:var(--muted);margin-top:10px;display:grid;grid-template-columns:64px 1fr;gap:5px 8px}
+.facts b{color:var(--text);font-weight:600}
+.chat{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+.me,.ai{max-width:88%;padding:11px 13px;border-radius:18px;font-size:14px;line-height:1.6}
+.me{align-self:flex-end;background:var(--accent);color:#fff;border-bottom-right-radius:5px}
+.ai{align-self:flex-start;background:#fff;border:1px solid var(--line);border-bottom-left-radius:5px}
+.ai .klms{display:block;margin-top:9px;padding-top:9px;border-top:1px dashed var(--line);font-size:13px;color:var(--muted)}
+.typing{padding:14px 16px}.dots{display:inline-flex;gap:4px}.dots i{width:7px;height:7px;border-radius:50%;background:#c4c3d6;animation:dot 1s infinite}.dots i:nth-child(2){animation-delay:.15s}.dots i:nth-child(3){animation-delay:.3s}@keyframes dot{0%,80%,100%{opacity:.35;transform:none}40%{opacity:1;transform:translateY(-3px)}}
+.pill{text-decoration:none}
+a.btn{text-align:center;text-decoration:none;box-sizing:border-box}
+.dday.soon{color:#dc2626}
+.go{margin-left:6px;color:#b9b9c6;font-size:18px;line-height:1}
+.empty{background:#fff;border:1px dashed var(--line);border-radius:20px;padding:22px;text-align:center;color:var(--muted);font-size:14px;line-height:1.6}
+.foot{position:fixed;left:0;right:0;bottom:0;text-align:center;font-size:11px;color:var(--muted);background:linear-gradient(transparent,#f6f5fc 45%);padding:24px 12px calc(10px + env(safe-area-inset-bottom))}
+.modal{position:fixed;inset:0;background:rgba(17,17,40,.45);display:none;align-items:center;justify-content:center;z-index:30;padding:20px}
+.modal.on{display:flex}
+.modal .box{background:#fff;border-radius:24px;padding:24px;max-width:340px;text-align:center}
+.modal h4{margin:0 0 8px;font-size:17px}
+.modal p{margin:0 0 6px;color:var(--muted);font-size:14px;line-height:1.55}
+.toast{position:fixed;left:50%;bottom:64px;transform:translateX(-50%);background:var(--text);color:#fff;font-size:13px;padding:10px 14px;border-radius:999px;opacity:0;transition:opacity .2s;z-index:40;white-space:nowrap}
+.toast.on{opacity:1}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top"><div class="logo"><i></i></div><b>넙죽이</b><a class="pill" href="../" target="_blank" rel="noopener">시범 화면 · 소개 ↗</a></div>
+
+  <!-- 화면 1: 조건 입력 -->
+  <section class="screen on" id="s1">
+    <h1>조건을 알려 주세요</h1>
+    <p class="lead">한 번만 입력하면, 조건에 맞는 장학·연구·근로 공지가 올라올 때 먼저 알려 드려요.</p>
+    <div class="panel">
+      <label class="f" for="grade">학년</label>
+      <select id="grade">
+        <option value="">선택</option>
+        <option value="1">1학년</option><option value="2">2학년</option>
+        <option value="3">3학년</option><option value="4">4학년</option>
+      </select>
+      <label class="f" for="dept">학과</label>
+      <select id="dept">
+        <option value="">선택</option>
+        <option>새내기과정학부</option><option>전산학부</option><option>전기및전자공학부</option>
+        <option>기계공학과</option><option>화학과</option><option>생명과학과</option>
+        <option>산업디자인학과</option><option>경영공학부</option>
+      </select>
+      <label class="f">성적·이수학점</label>
+      <div class="grid3">
+        <div><small>직전 학기 평점</small><input id="gpa" type="number" inputmode="decimal" step="0.01" min="0" max="4.3" placeholder="예) 3.50"></div>
+        <div><small>직전 학기 학점</small><input id="last" type="number" inputmode="numeric" min="0" max="30" placeholder="예) 18"></div>
+        <div><small>누적 이수학점</small><input id="cum" type="number" inputmode="numeric" min="0" max="200" placeholder="예) 40"></div>
+      </div>
+      <label class="f">관심 분야 <span>(여러 개 선택)</span></label>
+      <div class="chips" id="interest">
+        <button class="chip" data-v="장학">장학</button>
+        <button class="chip" data-v="연구">연구</button>
+        <button class="chip" data-v="근로">근로</button>
+        <button class="chip add" id="addInterest" aria-label="관심 분야 추가">＋</button>
+      </div>
+      <div class="addrow" id="addRow">
+        <input id="addInput" type="text" maxlength="12" placeholder="예) 공모전, 교환학생, 인턴">
+        <button class="chip on" id="addOk">추가</button>
+      </div>
+      <label class="f">알림 받을 곳</label>
+      <div class="chips" id="channel">
+        <button class="chip on" data-v="푸시">푸시 알림</button>
+        <button class="chip" data-v="카카오톡">카카오톡</button>
+        <button class="chip" data-v="메일">메일</button>
+      </div>
+      <div class="lock">🔒<span>입력하신 정보는 휴대폰 내부에서만 처리되고 외부로 전송되지 않습니다.</span></div>
+    </div>
+    <button class="btn primary" id="start" disabled>시작하기</button>
+    <div class="hint" id="startHint"></div>
+    <button class="btn link" id="wipe">이 휴대폰에서 내 정보 지우기</button>
+  </section>
+
+  <!-- 대기 -->
+  <section class="screen" id="sWait">
+    <div class="wait"><div class="logo"><i></i></div>
+      <b style="color:var(--text);font-size:17px">설정 완료!</b><br>
+      조건에 맞는 공지가 올라오면<br><span id="chName">카카오톡</span>으로 먼저 알려 드릴게요.
+    </div>
+  </section>
+
+  <!-- 화면 2: 판정 결과 -->
+  <section class="screen" id="s2">
+    <h1 id="matchTitle">N건이 조건과 맞아요</h1>
+    <div class="summary" id="profileLine"></div>
+    <div id="list"></div>
+    <button class="btn ghost" id="edit">조건 바꾸기</button>
+  </section>
+
+  <!-- 화면 3: AI 확인 → 신청 -->
+  <section class="screen" id="s3">
+    <button class="back" id="back">← 목록으로</button>
+    <div class="card" style="cursor:default" id="detail"></div>
+    <div class="chat" id="chat"></div>
+    <div id="actions" style="display:none">
+      <button class="btn primary" id="apply">신청하러 가기</button>
+      <button class="btn ghost" id="share">친구에게 공유</button>
+    </div>
+  </section>
+</div>
+
+<div class="banner" id="banner">
+  <div class="logo"><i></i></div>
+  <div><small>넙죽이 · 지금</small><strong id="bannerText">조건에 맞는 기회 발견!</strong><em>학년·학과·평점·이수학점까지 확인했어요</em></div>
+</div>
+
+<div class="modal" id="modal"><div class="box">
+  <h4>시범 화면입니다</h4>
+  <p>실제 신청은 되지 않아요.<br>진짜 공지로 써 보고 싶다면 사전 신청을 남겨 주세요.</p>
+  <a class="btn primary" href="https://docs.google.com/forms/d/e/1FAIpQLSdwQCW6N9Bbo9OQxlOK03TP_RYF0qePZaE66SEuAYThNnsvbA/viewform" target="_blank" rel="noopener">먼저 써 보기 신청</a>
+  <a class="btn link" href="../" target="_blank" rel="noopener">넙죽이 소개 보기</a>
+  <button class="btn ghost" id="modalOk">닫기</button>
+</div></div>
+<div class="toast" id="toast"></div>
+
+<div class="foot">시범 화면 · 실제 공고 아님 · 기관명은 모두 가상입니다 · 스타트업101(B) 1팀</div>
+
+<script>
+/* ===== 가상 공지 (virtual_notices_test.md) =====
+   grades: 대상 학년([]=전체) · depts: 대상 학과([]=전체)
+   num: 숫자로 판정하는 조건 {field:'gpa'|'last'|'cum', min, label}
+   extra: 숫자로 못 따지는 조건 → '본인 확인'                    */
+const NOTICES = [
+  {id:"N1", kind:"장학", org:"가나다 학생지원팀", title:"2027년도 봄학기 성적우수 장학생 모집", grades:[2,3], depts:[], num:{field:"gpa",min:3.5,label:"직전 학기 평점 3.5/4.3 이상"}, extra:"", due:"2026-11-27T24:00", amount:"100만 원 (1회)", seats:"20명", docs:"장학생 신청서, 성적증명서, 재학증명서", how:"이메일 제출 (scholar-test@example.com)"},
+  {id:"N2", kind:"장학", org:"라마바 새내기지원센터", title:"2026년도 새내기 생활장학금 신청", grades:[1], depts:["새내기과정학부"], num:null, extra:"타 장학금 중복 수혜 불가", due:"2026-11-20T24:00", amount:"50만 원 (1회)", seats:"30명", docs:"생활장학금 신청서, 재학증명서", how:"이메일 제출 (freshman-test@example.com)"},
+  {id:"N3", kind:"장학", org:"가나다 장학재단", title:"2027년도 이공계 장학생 선발", grades:[3,4], depts:["전산학부","전기및전자공학부"], num:{field:"cum",min:70,label:"누적 이수학점 70학점 이상"}, extra:"", due:"2026-12-04T24:00", amount:"300만 원 (월 30만 원 × 10개월)", seats:"추천 10명", docs:"신청서, 성적증명서, 재학증명서, 개인정보활용동의서", how:"이메일 제출 (foundation-test@example.com)"},
+  {id:"N4", kind:"연구", org:"아자차 인공지능연구실", title:"겨울학기 학부연구생 모집", grades:[2,3,4], depts:["전산학부"], num:null, extra:"겨울방학 8주 전일 참여 가능", due:"2026-11-25T18:00", amount:"월 60만 원", seats:"4명", docs:"학부연구생 지원서, 자기소개서", how:"이메일 제출 (ailab-test@example.com)"},
+  {id:"N5", kind:"연구", org:"카타파 로봇연구소", title:"2027년도 학부생 연구 인턴 모집", grades:[3,4], depts:["기계공학과","전기및전자공학부"], num:null, extra:"주 10시간 이상 참여 가능", due:"2026-12-11T24:00", amount:"월 40만 원", seats:"6명", docs:"연구 인턴 지원서, 성적증명서", how:"이메일 제출 (robot-test@example.com)"},
+  {id:"N6", kind:"연구", org:"하하하 기초과학연구단", title:"새내기 연구 체험 프로그램 참가자 모집", grades:[1], depts:[], num:null, extra:"지도교수 추천서 1부 제출 가능", due:"2026-11-18T24:00", amount:"활동비 20만 원", seats:"15명", docs:"참가 신청서, 지도교수 추천서", how:"이메일 제출 (science-test@example.com)"},
+  {id:"N7", kind:"근로", org:"거너더 도서관", title:"겨울학기 도서관 근로학생 모집", grades:[], depts:[], num:null, extra:"평일 주 8시간 근무 가능", due:"2026-11-17T18:00", amount:"시간당 12,000원", seats:"8명", docs:"근로학생 신청서, 근무 가능 시간표", how:"이메일 제출 (library-test@example.com)"},
+  {id:"N8", kind:"근로", org:"머버서 전산실", title:"2027년도 봄학기 전산실 근로학생 모집", grades:[2,3,4], depts:["전산학부"], num:{field:"last",min:15,label:"직전 학기 15학점 이상 이수"}, extra:"", due:"2026-11-30T24:00", amount:"시간당 13,000원", seats:"3명", docs:"근로학생 신청서, 성적증명서", how:"이메일 제출 (itroom-test@example.com)"},
+];
+const KLMS_LINE = "참고로 KLMS에도 새 공지 1건이 있어요 — 가나다개론(가상) 과제 3, 11/20(금) 23:59 마감.";
+const FIELD = {gpa:"평점", last:"직전 학기 학점", cum:"누적 이수학점"};
+
+const $ = s => document.querySelector(s);
+const state = {grade:"", dept:"", gpa:"", last:"", cum:"", interest:new Set(), channel:"푸시"};
+const KEY = "nubzuki-demo-profile";
+
+/* ---- 로컬 저장 (휴대폰 안에만) ---- */
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify({...state, interest:[...state.interest]})); }catch(e){} }
+function load(){
+  try{ const d=JSON.parse(localStorage.getItem(KEY)||"null"); if(!d) return;
+    Object.assign(state,d); state.interest=new Set(d.interest||[]); }catch(e){}
+}
+function wipe(){ try{ localStorage.removeItem(KEY); }catch(e){} location.hash=""; location.reload(); }
+
+/* ---- 마감 ---- */
+function dueDate(s){ const [d,t]=s.split("T"); const [h,m]=t.split(":").map(Number); const x=new Date(d+"T00:00:00"); x.setHours(h,m); return x; }
+function dday(n){ const ms=dueDate(n.due)-new Date(); if(ms<0) return null; return Math.max(0,Math.floor(ms/864e5)); }
+function dueText(n){ const d=dueDate(n.due); d.setMinutes(d.getMinutes()-1); const w="일월화수목금토"[d.getDay()]; return `${d.getMonth()+1}/${d.getDate()}(${w}) ${n.due.endsWith("24:00")?"24시":n.due.slice(11)}`; }
+
+/* ---- 판정 (휴대폰 안에서) ---- */
+function judge(n){
+  const g=Number(state.grade), checks=[];
+  let s="ok";
+  const down = v => { const r={ok:0,warn:1,no:2}; if(r[v]>r[s]) s=v; };
+  if(dday(n)===null){ return {s:"no",label:"마감됨",checks:[{s:"no",t:"접수 기간이 끝났어요"}]}; }
+  if(n.grades.length && !n.grades.includes(g)){
+    const gs=n.grades.length===1?`${n.grades[0]}학년만`:`${Math.min(...n.grades)}~${Math.max(...n.grades)}학년만`;
+    checks.push({s:"no",t:`✕ 학년: ${gs} (나: ${g}학년)`}); down("no");
+  } else checks.push({s:"ok",t:`✓ 학년: ${n.grades.length?`${Math.min(...n.grades)}~${Math.max(...n.grades)}학년`.replace(/^(\d)~\1/,"$1"):"전 학년"}`});
+  if(n.depts.length && !n.depts.includes(state.dept)){
+    checks.push({s:"no",t:`✕ 학과: ${n.depts.join("·")}만`}); down("no");
+  } else checks.push({s:"ok",t:`✓ 학과: ${n.depts.length?state.dept:"전체 학과"}`});
+  if(n.num){
+    const v=state[n.num.field];
+    if(v===""||v==null){ checks.push({s:"warn",t:`? ${n.num.label} — ${FIELD[n.num.field]}을 입력하면 바로 판정해요`}); down("warn"); }
+    else if(Number(v)>=n.num.min){ checks.push({s:"ok",t:`✓ ${n.num.label} (나: ${v})`}); }
+    else { checks.push({s:"no",t:`✕ ${n.num.label} (나: ${v})`}); down("no"); }
+  }
+  if(n.extra){ checks.push({s:"warn",t:`? 본인 확인: ${n.extra}`}); down("warn"); }
+  const label={ok:"지원 가능",warn:"확인 필요",no:"대상 아님"}[s];
+  return {s,label,checks};
+}
+function results(){
+  const r={ok:0,warn:1,no:2};
+  return NOTICES.filter(n=>state.interest.has(n.kind)).map(n=>({n,j:judge(n)}))
+    .sort((a,b)=>r[a.j.s]-r[b.j.s] || dueDate(a.n.due)-dueDate(b.n.due));
+}
+
+function show(id){ document.querySelectorAll(".screen").forEach(s=>s.classList.remove("on")); $(id).classList.add("on"); window.scrollTo(0,0); }
+
+/* ---- 화면 1 ---- */
+function fillForm(){
+  $("#grade").value=state.grade; $("#dept").value=state.dept;
+  $("#gpa").value=state.gpa; $("#last").value=state.last; $("#cum").value=state.cum;
+  state.interest.forEach(v=>{ if(!document.querySelector(`#interest .chip[data-v="${CSS.escape(v)}"]`)) addChip(v); });
+  document.querySelectorAll("#interest .chip[data-v]").forEach(c=>c.classList.toggle("on",state.interest.has(c.dataset.v)));
+  document.querySelectorAll("#channel .chip").forEach(c=>c.classList.toggle("on",c.dataset.v===state.channel));
+}
+function bindChip(c){
+  c.onclick=()=>{ const v=c.dataset.v; state.interest.has(v)?state.interest.delete(v):state.interest.add(v); c.classList.toggle("on"); checkReady(); };
+}
+function addChip(v){
+  const c=document.createElement("button"); c.className="chip"; c.dataset.v=v; c.textContent=v;
+  $("#interest").insertBefore(c,$("#addInterest")); bindChip(c); return c;
+}
+function checkReady(){
+  const ok=state.grade&&state.dept&&state.interest.size>0;
+  $("#start").disabled=!ok; $("#startHint").style.visibility=ok?"hidden":"visible";
+}
+["grade","dept","gpa","last","cum"].forEach(k=>$("#"+k).addEventListener("input",e=>{state[k]=e.target.value;checkReady();}));
+document.querySelectorAll("#interest .chip[data-v]").forEach(bindChip);
+$("#addInterest").onclick=()=>{ $("#addRow").classList.toggle("on"); $("#addInput").focus(); };
+function commitAdd(){
+  const v=$("#addInput").value.trim(); if(!v) return;
+  let c=document.querySelector(`#interest .chip[data-v="${CSS.escape(v)}"]`) || addChip(v);
+  state.interest.add(v); c.classList.add("on");
+  $("#addInput").value=""; $("#addRow").classList.remove("on"); checkReady();
+}
+$("#addOk").onclick=commitAdd;
+$("#addInput").addEventListener("keydown",e=>{ if(e.key==="Enter"){ e.preventDefault(); commitAdd(); } });
+document.querySelectorAll("#channel .chip").forEach(c=>c.onclick=()=>{ state.channel=c.dataset.v; fillForm(); });
+$("#wipe").onclick=wipe;
+
+function profileHash(){
+  const p=new URLSearchParams({g:state.grade,d:state.dept,i:[...state.interest].join(",")});
+  ["gpa","last","cum"].forEach(k=>{ if(state[k]) p.set(k,state[k]); });
+  return "#"+p.toString();
+}
+/* 진짜 푸시: 서버 없이 휴대폰이 스스로 알림을 띄움 (안드로이드·PC 크롬 / 아이폰은 홈 화면에 추가했을 때만) */
+async function tryPush(title, body){
+  try{
+    if(!("Notification" in window) || !("serviceWorker" in navigator)) return false;
+    let perm=Notification.permission;
+    if(perm==="default") perm=await Notification.requestPermission();
+    if(perm!=="granted") return false;
+    const reg=await navigator.serviceWorker.register("sw.js");
+    await navigator.serviceWorker.ready;
+    const url=location.href.split("#")[0]+profileHash();
+    setTimeout(()=>reg.showNotification(title,{body, icon:"icon.png", badge:"icon.png", tag:"nubzuki-demo", data:{url}}),2200);
+    return true;
+  }catch(e){ return false; }
+}
+$("#start").onclick=async()=>{
+  save();
+  const n=results().filter(r=>r.j.s!=="no").length;
+  const title = n?`조건에 맞는 기회 ${n}건 발견!`:"새 공지가 올라왔어요";
+  $("#bannerText").textContent=title;
+  let pushed=false;
+  if(state.channel==="푸시") pushed=await tryPush("넙죽이 · "+title,"학년·학과·평점·이수학점까지 확인했어요");
+  $("#chName").textContent = state.channel==="푸시"?"푸시 알림":state.channel;
+  show("#sWait");
+  if(state.channel==="푸시" && !pushed) toast("이 기기는 푸시가 막혀 있어 화면 알림으로 보여 드려요");
+  setTimeout(()=>$("#banner").classList.add("show"), pushed?3200:2200);
+};
+$("#banner").onclick=()=>{ $("#banner").classList.remove("show"); renderList(); show("#s2"); };
+
+/* ---- 화면 2 ---- */
+function profileText(){
+  const extra=[state.gpa&&`평점 ${state.gpa}`,state.last&&`직전 ${state.last}학점`,state.cum&&`누적 ${state.cum}학점`].filter(Boolean).join(" · ");
+  return `<b>${state.grade}학년 · ${state.dept}</b>${extra?" · "+extra:""}<br>관심: ${[...state.interest].join(", ")} · 🔒 이 휴대폰에서만 판정`;
+}
+function cardHTML(n,j,full){
+  const d=dday(n);
+  return `<div class="row"><span class="badge ${j.s}">${j.label}</span><span class="dday${d!==null&&d<=3?" soon":""}">${d===null?"마감":d===0?"오늘 마감":`D-${d}`}</span><span class="kind">${n.kind}</span>${!full&&j.s!=="no"?'<span class="go">›</span>':""}</div>
+    <h3>${n.title}</h3><div class="org">${n.org} · ${n.amount}</div>
+    <div class="checks">${j.checks.map(c=>`<span class="${c.s}">${c.t}</span>`).join("")}</div>
+    ${full?`<div class="facts"><span>마감</span><b>${dueText(n)}</b><span>인원</span><b>${n.seats}</b><span>서류</span><b>${n.docs}</b><span>접수</span><b>${n.how}</b></div>`:""}`;
+}
+function renderList(){
+  const rs=results(), n=rs.filter(r=>r.j.s!=="no").length;
+  $("#matchTitle").textContent=`${n}건이 조건과 맞아요`;
+  $("#profileLine").innerHTML=profileText();
+  const box=$("#list"); box.innerHTML=""; let hdr=false;
+  if(!rs.length){ box.innerHTML=`<div class="empty">선택한 관심 분야에 맞는 공지가 아직 없어요.<br>새 공지가 올라오면 바로 알려 드릴게요.</div>`; }
+  rs.forEach(({n,j})=>{
+    if(j.s==="no"&&!hdr){ box.insertAdjacentHTML("beforeend",`<div class="sec">대상이 아닌 공지</div>`); hdr=true; }
+    const el=document.createElement("div"); el.className="card"+(j.s==="no"?" no":"");
+    el.innerHTML=cardHTML(n,j,false);
+    if(j.s!=="no") el.onclick=()=>openDetail(n,j);
+    box.appendChild(el);
+  });
+}
+$("#edit").onclick=()=>{ fillForm(); checkReady(); show("#s1"); };
+
+/* ---- 화면 3 ---- */
+function aiAnswer(n,j){
+  const d=dday(n);
+  const okParts=[`${state.grade}학년`, state.dept];
+  if(n.num && state[n.num.field]!=="" && Number(state[n.num.field])>=n.num.min) okParts.push(`${FIELD[n.num.field]} ${state[n.num.field]}`);
+  let a = j.s==="ok"
+    ? `네, 지원할 수 있어요. ${okParts.join(" · ")}라서 조건이 모두 맞아요.`
+    : `${okParts.join(" · ")} 기준으로는 맞아요. 다만 아래는 직접 확인해 주세요.<br>` +
+      j.checks.filter(c=>c.s==="warn").map(c=>"· "+c.t.replace(/^\? /,"")).join("<br>");
+  a += `<br><br>마감은 <b>${dueText(n)}</b> (${d}일 남음)이고, 준비 서류는 <b>${n.docs}</b>예요.`;
+  return a;
+}
+function openDetail(n,j){
+  $("#detail").innerHTML=cardHTML(n,j,true);
+  const chat=$("#chat"); chat.innerHTML=`<div class="me">이거 나도 돼?</div><div class="ai typing"><span class="dots"><i></i><i></i><i></i></span></div>`;
+  $("#actions").style.display="none"; show("#s3");
+  setTimeout(()=>{ const a=chat.lastElementChild; a.className="ai"; a.innerHTML=aiAnswer(n,j)+`<span class="klms">${KLMS_LINE}</span>`; $("#actions").style.display="block"; },1100);
+}
+$("#back").onclick=()=>show("#s2");
+$("#apply").onclick=()=>$("#modal").classList.add("on");
+$("#modalOk").onclick=()=>$("#modal").classList.remove("on");
+$("#share").onclick=async()=>{
+  const url=location.href.split("#")[0];   // 내 정보(#…)는 빼고 공유
+  try{ if(navigator.share){ await navigator.share({title:"넙죽이 시범 화면",url}); return; } }catch(e){}
+  try{ await navigator.clipboard.writeText(url); toast("링크를 복사했어요"); }catch(e){ toast(url); }
+};
+function toast(t){ const el=$("#toast"); el.textContent=t; el.classList.add("on"); setTimeout(()=>el.classList.remove("on"),1800); }
+
+/* ---- 시작 ----
+   다음 주 실험용: 카톡 링크로 화면 2 바로 열기
+   예) …/#g=2&d=전산학부&i=장학,연구&gpa=3.6&last=18&cum=40
+   (#뒤 값은 서버로 전송되지 않음)                                  */
+load();
+(function(){
+  const h=new URLSearchParams(location.hash.slice(1));
+  if(h.get("g")&&h.get("d")&&h.get("i")){
+    state.grade=h.get("g"); state.dept=h.get("d"); state.interest=new Set(h.get("i").split(","));
+    state.gpa=h.get("gpa")||""; state.last=h.get("last")||""; state.cum=h.get("cum")||"";
+    fillForm(); checkReady(); renderList(); show("#s2"); return;
+  }
+  fillForm(); checkReady();
+})();
+</script>
+</body>
+</html>
